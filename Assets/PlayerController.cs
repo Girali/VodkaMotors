@@ -4,11 +4,24 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController _instance = null;
+    public static PlayerController Instance
+    {
+        get
+        {
+            if (_instance == null)
+                _instance = FindObjectOfType<PlayerController>();
+            return _instance;
+        }
+    }
+
     private ToolType currentTool = ToolType.Hand;
 
     [SerializeField]
     private CharacterJoint hand;
     private FurniturePiece grabed;
+    private Vector3 lastHandPosition;
+    private Vector3 velocityAtFrame;
 
     [SerializeField]
     private Transform movePlan;
@@ -22,7 +35,7 @@ public class PlayerController : MonoBehaviour
     private Transform orbitTempY;
     [SerializeField]
     private Camera cam;
-    private float speed = .2f;
+    private float speed = .5f;
 
     private int planLayer;
 
@@ -31,6 +44,15 @@ public class PlayerController : MonoBehaviour
         planLayer = LayerMask.GetMask("Ignore Raycast");
         orbitTempX.rotation = cam.transform.rotation;
         orbitTempY.rotation = cam.transform.rotation;
+    }
+
+    IEnumerator AddNextFramePhysFrameForce(Rigidbody rb)
+    {
+        yield return new WaitForFixedUpdate();
+        rb.velocity = velocityAtFrame * 30;
+
+        //Debug.DrawLine(lastHandPosition, lastHandPosition + (velocityAtFrame * 10), Color.red);
+        //Debug.DrawLine(lastHandPosition, lastHandPosition + Vector3.up, Color.green);
     }
 
     public void Update()
@@ -59,6 +81,7 @@ public class PlayerController : MonoBehaviour
                                     grabed = hit.rigidbody.GetComponent<FurniturePiece>();
                                     hand.transform.position = hit.point;
                                     movePlan.position = hit.point;
+                                    grabed.StartGrab();
                                 }
                             }
                         }
@@ -75,6 +98,8 @@ public class PlayerController : MonoBehaviour
                         if(hand.connectedBody == null)
                             hand.connectedBody = grabed.GetComponent<Rigidbody>();
 
+                        lastHandPosition = hand.transform.position;
+                        velocityAtFrame = (hit.point - lastHandPosition);
                         hand.transform.position = hit.point;
 
                         float f = Input.GetAxis("Mouse ScrollWheel") * speed;
@@ -83,15 +108,18 @@ public class PlayerController : MonoBehaviour
 
                     if (Input.GetMouseButtonUp(0))
                     {
-                        grabed = null;
-                        hand.connectedBody = null;
-                        usingHand = true;
+                        StartCoroutine(AddNextFramePhysFrameForce(hand.connectedBody));
+                        ReleaseCommand();
+                        usingHand = false;
                     }
                 }
 
 
-                if (usingHand)
+                if (!usingHand)
                 {
+                    float f = Input.GetAxis("Mouse ScrollWheel") * speed;
+                    cam.transform.position += cam.transform.forward * f;
+
                     if (Input.GetMouseButton(1))
                     {
                         camPivot.Rotate(Vector3.up, -Input.GetAxis("Mouse X"), Space.World);
@@ -116,8 +144,16 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
+    }
 
-
+    public void ReleaseCommand()
+    {
+        if (grabed)
+        {
+            grabed.StopGrab();
+            grabed = null;
+            hand.connectedBody = null;
+        }
     }
 
     public enum ToolType
