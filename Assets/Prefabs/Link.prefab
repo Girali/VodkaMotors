@@ -111,6 +111,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anchor: {fileID: 3322894639316044762}
   from: {fileID: 0}
+  meshRenderer: {fileID: 3322894638893106567}
+  glueIn: 0
+  linker: {fileID: 0}
 --- !u!1 &3322894639316044763
 GameObject:
   m_ObjectHideFlags: 0

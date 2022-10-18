@@ -6,7 +6,7 @@ public class FurniturePiece : MonoBehaviour
 {
     public FurnitureType type;
     public AnchorType anchorType;
-    protected Rigidbody rb;
+    public Rigidbody rb;
 
     public bool IsGrabed
     {
@@ -19,6 +19,73 @@ public class FurniturePiece : MonoBehaviour
     [SerializeField]
     protected Link[] links;
     protected bool grabed = false;
+
+    public void AddRigidbody()
+    {
+        Collider c = GetComponent<Collider>();
+
+        if (!c.attachedRigidbody)
+        {
+            Debug.Log(name);
+            gameObject.AddComponent<Rigidbody>();
+            rb = GetComponent<Rigidbody>();
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        }
+    }
+
+    public virtual void DetachePiece(Vector3 v)
+    {
+        //if (transform.parent != null)
+        {
+            transform.parent = null;
+
+            Link li = null;
+            float d = float.MaxValue;
+
+            foreach (Link l in links)
+            {
+                if(d > Vector3.Distance(l.Anchor.position, v))
+                {
+                    if (l.To != null)
+                    {
+                        li = l;
+                        d = Vector3.Distance(l.Anchor.position, v);
+                    }
+                }
+            }
+
+            li.From.AddRigidbody();
+            li.To.AddRigidbody();
+
+        }
+    }
+
+    public void CheckLinkState()
+    {
+
+    }
+
+    public Link GetOtherLink(FurniturePiece f)
+    {
+        foreach (Link l in links)
+        {
+            if (l.To == f)
+                return l;
+        }
+
+        return null;
+    }
+
+    public void AddForceNextPhysFrame(Vector3 p, Vector3 f)
+    {
+        StartCoroutine(CRT_AddForceNextPhysFrame(p, f));
+    }
+
+    IEnumerator CRT_AddForceNextPhysFrame(Vector3 p, Vector3 f)
+    {
+        yield return new WaitForFixedUpdate();
+        rb.AddForceAtPosition(f, p);
+    }
 
     public virtual List<FurnitureSet> Init()
     {
@@ -49,12 +116,16 @@ public class FurniturePiece : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-
-
-    public void PlaceComponent(Link f, Link other)
+    public void PlaceComponentInverse(Link f, Link on)
     {
+        f.PlaceInverse(on);
+        Destroy(f.From.rb);
+    }
+
+    public void PlaceComponent(Link f, Link on)
+    {
+        f.Place(on);
         Destroy(rb);
-        f.Place(other);
     }
 }
 
@@ -84,5 +155,6 @@ public enum FurnitureType
     Base,
     Leg,
     Back,
-    Handrest
+    Handrest,
+    Tool
 }

@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 3671091656076552770}
   - component: {fileID: 3671091656076552768}
   - component: {fileID: 3671091656076552769}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Linker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,9 +130,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   anchorType: 0
+  rb: {fileID: 0}
   links:
   - {fileID: 2909797411708694703}
-  anchor: {fileID: 2909797411708694703}
 --- !u!65 &3671091656076552768
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -221,6 +221,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3322894638893106586, guid: 1cc07a6e90fe2264baf613f51eb151b5, type: 3}
+      propertyPath: from
+      value: 
+      objectReference: {fileID: 3671091656076552770}
     - target: {fileID: 3322894638893106587, guid: 1cc07a6e90fe2264baf613f51eb151b5, type: 3}
       propertyPath: m_Name
       value: Link

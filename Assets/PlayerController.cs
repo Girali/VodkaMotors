@@ -15,8 +15,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private ToolType currentTool = ToolType.Hand;
-
     [SerializeField]
     private CharacterJoint hand;
     private FurniturePiece grabed;
@@ -57,92 +55,91 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
-        switch (currentTool)
+        Vector3 v = Input.mousePosition;
+        bool usingHand = false;
+        v.x /= Screen.width;
+        v.y /= Screen.height;
+
+        Ray r = cam.ViewportPointToRay(v);
+        RaycastHit hit;
+
+        if (grabed == null) 
         {
-            case ToolType.Hand:
-                Vector3 v = Input.mousePosition;
-                bool usingHand = false;
-                v.x /= Screen.width;
-                v.y /= Screen.height;
-
-                Ray r = cam.ViewportPointToRay(v);
-                RaycastHit hit;
-
-                if (grabed == null) 
+            if (Physics.Raycast(r, out hit, 20f))
+            {
+                if (Input.GetMouseButtonDown(0))
                 {
-                    if (Physics.Raycast(r, out hit, 20f))
+                    if (hit.rigidbody)
                     {
-                        if (Input.GetMouseButtonDown(0))
+                        if (hit.rigidbody.GetComponent<FurniturePiece>())
                         {
-                            if (hit.rigidbody)
-                            {
-                                if (hit.rigidbody.GetComponent<FurniturePiece>())
-                                {
-                                    grabed = hit.rigidbody.GetComponent<FurniturePiece>();
-                                    hand.transform.position = hit.point;
-                                    movePlan.position = hit.point;
-                                    grabed.StartGrab();
-                                }
-                            }
+                            grabed = hit.rigidbody.GetComponent<FurniturePiece>();
+                            hand.transform.position = hit.point;
+                            movePlan.position = hit.point;
+                            grabed.StartGrab();
                         }
                     }
                 }
-                else
+
+                if (Input.GetMouseButtonDown(1))
                 {
-                    if (Input.GetMouseButton(0))
+                    if (hit.collider)
                     {
-                        usingHand = true;
-
-                        Physics.Raycast(r.origin, r.direction, out hit, 20f, planLayer);
-
-                        if(hand.connectedBody == null)
-                            hand.connectedBody = grabed.GetComponent<Rigidbody>();
-
-                        lastHandPosition = hand.transform.position;
-                        velocityAtFrame = (hit.point - lastHandPosition);
-                        hand.transform.position = hit.point;
-
-                        float f = Input.GetAxis("Mouse ScrollWheel") * speed;
-                        movePlan.position += movePlan.forward * f;
-                    }
-
-                    if (Input.GetMouseButtonUp(0))
-                    {
-                        StartCoroutine(AddNextFramePhysFrameForce(hand.connectedBody));
-                        ReleaseCommand();
-                        usingHand = false;
+                        if (hit.collider.GetComponent<FurniturePiece>())
+                        {
+                            FurniturePiece f = hit.collider.GetComponent<FurniturePiece>();
+                            f.DetachePiece(hit.point);
+                        }
                     }
                 }
+            }
+        }
+        else
+        {
+            if (Input.GetMouseButton(0))
+            {
+                usingHand = true;
+
+                Physics.Raycast(r.origin, r.direction, out hit, 20f, planLayer);
+
+                if(hand.connectedBody == null)
+                    hand.connectedBody = grabed.GetComponent<Rigidbody>();
+
+                lastHandPosition = hand.transform.position;
+                velocityAtFrame = (hit.point - lastHandPosition);
+                hand.transform.position = hit.point;
+
+                float f = Input.GetAxis("Mouse ScrollWheel") * speed;
+                movePlan.position += movePlan.forward * f;
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                StartCoroutine(AddNextFramePhysFrameForce(hand.connectedBody));
+                ReleaseCommand();
+                usingHand = false;
+            }
+        }
 
 
-                if (!usingHand)
-                {
-                    float f = Input.GetAxis("Mouse ScrollWheel") * speed;
-                    cam.transform.position += cam.transform.forward * f;
+        if (!usingHand)
+        {
+            float f = Input.GetAxis("Mouse ScrollWheel") * speed;
+            cam.transform.position += cam.transform.forward * f;
 
-                    if (Input.GetMouseButton(1))
-                    {
-                        camPivot.Rotate(Vector3.up, -Input.GetAxis("Mouse X"), Space.World);
-                    }
+            if (Input.GetMouseButton(1))
+            {
+                camPivot.Rotate(Vector3.up, -Input.GetAxis("Mouse X"), Space.World);
+            }
 
-                    if (Input.GetMouseButton(2))
-                    {
-                        furnitureOrbit.Rotate(orbitTempX.up, -Input.GetAxis("Mouse X"), Space.World);
-                        furnitureOrbit.Rotate(orbitTempY.right, Input.GetAxis("Mouse Y"), Space.World);
+            if (Input.GetMouseButton(2))
+            {
+                furnitureOrbit.Rotate(orbitTempX.up, -Input.GetAxis("Mouse X"), Space.World);
+                furnitureOrbit.Rotate(orbitTempY.right, Input.GetAxis("Mouse Y"), Space.World);
 
-                        orbitTempX.Rotate(cam.transform.up, Input.GetAxis("Mouse X"), Space.World);
-                        orbitTempY.Rotate(cam.transform.right, -Input.GetAxis("Mouse Y"), Space.World);
-                    }
-                }
-                break;
-            case ToolType.Glue:
-                break;
-            case ToolType.Screwdriver:
-                break;
-            case ToolType.Hexkey:
-                break;
-            default:
-                break;
+                orbitTempX.Rotate(cam.transform.up, Input.GetAxis("Mouse X"), Space.World);
+                orbitTempY.Rotate(cam.transform.right, -Input.GetAxis("Mouse Y"), Space.World);
+            }
         }
     }
 
@@ -154,13 +151,5 @@ public class PlayerController : MonoBehaviour
             grabed = null;
             hand.connectedBody = null;
         }
-    }
-
-    public enum ToolType
-    {
-        Hand,
-        Glue,
-        Screwdriver,
-        Hexkey
     }
 }

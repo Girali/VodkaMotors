@@ -14,7 +14,6 @@ public class FurnitureController : MonoBehaviour
     private void Start()
     {
         GenerateFurniture();
-
     }
 
     public void GenerateFurniture()
