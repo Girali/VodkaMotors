@@ -24,7 +24,7 @@ public class FurniturePiece : MonoBehaviour
     {
         Collider c = GetComponent<Collider>();
 
-        if (!c.attachedRigidbody)
+        if (c.attachedRigidbody == null)
         {
             Debug.Log(name);
             gameObject.AddComponent<Rigidbody>();
@@ -33,31 +33,37 @@ public class FurniturePiece : MonoBehaviour
         }
     }
 
-    public virtual void DetachePiece(Vector3 v)
+    IEnumerator CRT_Detach(Vector3 v)
     {
-        //if (transform.parent != null)
+        Link li = null;
+        float d = float.MaxValue;
+
+        foreach (Link l in links)
         {
-            transform.parent = null;
-
-            Link li = null;
-            float d = float.MaxValue;
-
-            foreach (Link l in links)
+            if (d > Vector3.Distance(l.Anchor.position, v))
             {
-                if(d > Vector3.Distance(l.Anchor.position, v))
+                if (l.To != null)
                 {
-                    if (l.To != null)
-                    {
-                        li = l;
-                        d = Vector3.Distance(l.Anchor.position, v);
-                    }
+                    li = l;
+                    d = Vector3.Distance(l.Anchor.position, v);
                 }
             }
-
-            li.From.AddRigidbody();
-            li.To.AddRigidbody();
-
         }
+
+        li.From.transform.parent = null;
+        li.To.transform.parent = null;
+
+        yield return new WaitForFixedUpdate();
+
+        li.From.AddRigidbody();
+        li.To.AddRigidbody();
+
+        li.Detache(this);
+    }
+
+    public virtual void DetachePiece(Vector3 v)
+    {
+        StartCoroutine(CRT_Detach(v));
     }
 
     public void CheckLinkState()
