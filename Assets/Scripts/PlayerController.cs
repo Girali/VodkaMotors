@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     private Transform orbitTempY;
     [SerializeField]
     private Camera cam;
-    private float speed = .5f;
+    private float speed = 1f;
 
     private int planLayer;
 

@@ -50,15 +50,18 @@ public class FurniturePiece : MonoBehaviour
             }
         }
 
-        li.From.transform.parent = null;
-        li.To.transform.parent = null;
+        if (li != null)
+        {
+            li.From.transform.parent = null;
+            li.To.transform.parent = null;
 
-        yield return new WaitForFixedUpdate();
+            yield return new WaitForFixedUpdate();
 
-        li.From.AddRigidbody();
-        li.To.AddRigidbody();
+            li.From.AddRigidbody();
+            li.To.AddRigidbody();
 
-        li.Detache(this);
+            li.Detache(this);
+        }
     }
 
     public virtual void DetachePiece(Vector3 v)

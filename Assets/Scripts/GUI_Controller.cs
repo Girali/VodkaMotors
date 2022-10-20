@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GUI_Controller : MonoBehaviour
 {
@@ -19,6 +20,45 @@ public class GUI_Controller : MonoBehaviour
     }
 
     public GameObject[] toolIcons;
+
+    public UnityEvent notifyLeftClickDown;
+    public UnityEvent notifyMidleClickDown;
+    public UnityEvent notifyRightClickDown;
+
+    public UnityEvent notifyLeftClickUp;
+    public UnityEvent notifyMidleClickUp;
+    public UnityEvent notifyRightClickUp;
+
+    public UnityEvent notifyScrollDown;
+    public UnityEvent notifyScrollUp;
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+            notifyLeftClickDown.Invoke();
+
+        if (Input.GetMouseButtonDown(2))
+            notifyMidleClickDown.Invoke();
+
+        if (Input.GetMouseButtonDown(1))
+            notifyRightClickDown.Invoke();
+
+        if (Input.GetMouseButtonUp(0))
+            notifyLeftClickUp.Invoke();
+
+        if (Input.GetMouseButtonUp(2))
+            notifyMidleClickUp.Invoke();
+
+        if (Input.GetMouseButtonUp(1))
+            notifyRightClickUp.Invoke();
+
+        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+            notifyScrollDown.Invoke();
+
+        if(Input.GetAxis("Mouse ScrollWheel") == 0)
+            notifyScrollUp.Invoke();
+
+    }
 
     public void SetTool(ToolType t)
     {
