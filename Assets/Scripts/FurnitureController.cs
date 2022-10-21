@@ -106,7 +106,7 @@ public class FurnitureController : MonoBehaviour
                     break;
             }
         }
-        while (s.type != fp.type && s.anchorType != fp.anchorType);
+        while (s.type != fp.type || s.anchorType != fp.anchorType);
 
         return fp;
     }

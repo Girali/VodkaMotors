@@ -12,6 +12,8 @@ public class Link : MonoBehaviour
 
     [SerializeField]
     private MeshRenderer meshRenderer;
+
+    public Link[] neededLinks;
     public bool glueIn = false;
     public Linker linker = null;
     private bool grabed = false;
@@ -139,27 +141,69 @@ public class Link : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public bool inZone = false;
+
+    public void OnTriggerExit(Collider other)
     {
         Linker l = other.GetComponent<Linker>();
         if (l)
+            inZone = false;
+    }
+
+    public static bool CheckMultiLinkNeed(Link selfLink, Link otherLink)
+    {
+        if (selfLink.neededLinks != null && otherLink.neededLinks != null)
+        {
+            if (selfLink.neededLinks.Length == otherLink.neededLinks.Length)
+            {
+                bool isOk = true;
+
+                foreach (Link h in selfLink.neededLinks)
+                {
+                    if (h.inZone == false)
+                    {
+                        isOk = false;
+                        break;
+                    }
+                }
+
+                return isOk;
+            }
+        }
+
+        return false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Linker l = other.GetComponent<Linker>();
+        if(l)
+            inZone = true;
+
+        if (l != null)
         {
             if (!l.IsUsed)
             {
                 if (grabed)
                 {
-
                     if (l.IsLinked)
                     {
                         if (!l.IsGrabed)
                         {
-                            l.PlacePiece(from, this);
+                            if(CheckMultiLinkNeed(this, l.Link))
+                            {
+
+                            }
+                            else
+                            {
+
+                                l.PlacePiece(from, this);
+                            }
                         }
                     }
                 }
                 else
                 {
-
                     if (!l.IsLinked)
                     {
                         if (l.IsGrabed)
@@ -171,7 +215,14 @@ public class Link : MonoBehaviour
                     {
                         if (l.IsGrabed)
                         {
-                            l.PlacePieceInverse(from, this);
+                            if (CheckMultiLinkNeed(this, l.Link))
+                            {
+
+                            }
+                            else
+                            {
+                                l.PlacePieceInverse(from, this);
+                            }
                         }
                     }
                 }

@@ -20,6 +20,8 @@ public class GUI_Controller : MonoBehaviour
     }
 
     public GameObject[] toolIcons;
+    public GameObject helpPanel;
+    public GameObject[] helpPanels;
 
     public UnityEvent notifyLeftClickDown;
     public UnityEvent notifyMidleClickDown;
@@ -32,8 +34,33 @@ public class GUI_Controller : MonoBehaviour
     public UnityEvent notifyScrollDown;
     public UnityEvent notifyScrollUp;
 
+    public enum HelpStep
+    {
+        None,
+        Hand,
+        Grab,
+        View
+    }
+
+    HelpStep currentHelpStep = HelpStep.None;
+
+    public void SetStep(HelpStep s)
+    {
+        if(s != currentHelpStep)
+        {
+            currentHelpStep = s;
+            for (int i = 0; i < helpPanels.Length; i++)
+            {
+                helpPanels[i].SetActive(i + 1 == (int)s);
+            }
+        }
+    }
+
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.H))
+            helpPanel.SetActive(!helpPanel.activeSelf);
+
         if (Input.GetMouseButtonDown(0))
             notifyLeftClickDown.Invoke();
 
