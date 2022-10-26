@@ -8,17 +8,51 @@ public class FurniturePiece : MonoBehaviour
     public AnchorType anchorType;
     public Rigidbody rb;
 
-    public bool IsGrabed
-    {
-        get
-        {
-            return grabed;
-        }
-    }
+    public bool IsGrabed    {        get        {            return grabed;        }    }
 
     [SerializeField]
     protected Link[] links;
+    protected List<LinkSet> linkSets;
     protected bool grabed = false;
+
+    public void AddSet(Link f, Link t, Linker l)
+    {
+        linkSets.Add(new LinkSet(f, t, l));
+    }
+
+    public void RemoveSet(Linker l)
+    {
+        linkSets.RemoveAll((h) => h.IsEqual(l));
+    }
+
+    public LinkSet FindSetByFromLink(Link l)
+    {
+        return linkSets.Find((h) => h.IsEqual(l));
+    }
+
+    public class LinkSet
+    {
+        public Link from;
+        public Link to;
+        public Linker linker;
+
+        public LinkSet(Link from, Link to, Linker linker)
+        {
+            this.from = from;
+            this.to = to;
+            this.linker = linker;
+        }
+
+        public bool IsEqual(Link f)
+        {
+            return f == from;
+        }
+
+        public bool IsEqual(Linker l)
+        {
+            return linker == l;
+        }
+    }
 
     public void AddRigidbody()
     {
@@ -26,11 +60,17 @@ public class FurniturePiece : MonoBehaviour
 
         if (c.attachedRigidbody == null)
         {
-            Debug.Log(name);
             gameObject.AddComponent<Rigidbody>();
             rb = GetComponent<Rigidbody>();
             rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
         }
+    }
+
+
+
+    public virtual void DetachePiece(Vector3 v)
+    {
+        StartCoroutine(CRT_Detach(v));
     }
 
     IEnumerator CRT_Detach(Vector3 v)
@@ -64,27 +104,6 @@ public class FurniturePiece : MonoBehaviour
         }
     }
 
-    public virtual void DetachePiece(Vector3 v)
-    {
-        StartCoroutine(CRT_Detach(v));
-    }
-
-    public void CheckLinkState()
-    {
-
-    }
-
-    public Link GetOtherLink(FurniturePiece f)
-    {
-        foreach (Link l in links)
-        {
-            if (l.To == f)
-                return l;
-        }
-
-        return null;
-    }
-
     public void AddForceNextPhysFrame(Vector3 p, Vector3 f)
     {
         StartCoroutine(CRT_AddForceNextPhysFrame(p, f));
@@ -99,6 +118,7 @@ public class FurniturePiece : MonoBehaviour
     public virtual List<FurnitureSet> Init()
     {
         List<FurnitureSet> needs = new List<FurnitureSet>();
+        linkSets = new List<LinkSet>();
         return needs;
     }
 

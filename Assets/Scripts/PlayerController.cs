@@ -110,7 +110,13 @@ public class PlayerController : MonoBehaviour
                 velocityAtFrame = (hit.point - lastHandPosition);
                 hand.transform.position = hit.point;
 
-                float f = Input.GetAxis("Mouse ScrollWheel") * speed;
+                float s = speed;
+
+                if (Input.GetKey(KeyCode.LeftShift))
+                    s /= 5;
+
+                float f = Input.GetAxis("Mouse ScrollWheel") *  s;
+         
                 movePlan.position += movePlan.forward * f;
             }
 

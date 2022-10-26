@@ -5,37 +5,13 @@ using UnityEngine;
 public class Linker : FurniturePiece
 {
     private Link link;
-    private FurniturePiece from;
-
+    private Link toLink;
     private bool isUsed = false;
 
-
-    public bool IsUsed
-    {
-        get
-        {
-            return isUsed;
-        }
-    }
-
-    public bool IsLinked
-    {
-        get
-        {
-            return link != null;
-        }
-    }
-
-
-    public FurniturePiece From { get => from; }
+    public bool IsUsed { get { return isUsed; } }
+    public bool IsLinked { get { return link != null; } }
     public Link Link { get => link; }
-
-    public void PlacePieceInverse(FurniturePiece f, Link l)
-    {
-        PlayerController.Instance.ReleaseCommand();
-        f.PlaceComponentInverse(link, l);
-        isUsed = true;
-    }
+    public Link ToLink { get => toLink; set => toLink = value; }
 
     public override void DetachePiece(Vector3 v)
     {
@@ -57,15 +33,9 @@ public class Linker : FurniturePiece
                 link.InsertLinker(null);
                 link.gameObject.SetActive(true);
                 link = null;
+                toLink = null;
             }
         }
-    }
-
-    public void PlacePiece(FurniturePiece f, Link l)
-    {
-        PlayerController.Instance.ReleaseCommand();
-        f.PlaceComponent(link, l);
-        isUsed = true;
     }
 
     public void ResetLink()
@@ -73,22 +43,12 @@ public class Linker : FurniturePiece
         isUsed = false;
     }
 
-    public bool PlaceLinker(Link l)
+    public void PlaceLinker(Link l)
     {
-        bool b = l.InsertLinker(this);
-
-        if (b)
-        {
-            Destroy(rb);
-            gameObject.layer = 7;
-            link = l;
-            PlayerController.Instance.ReleaseCommand();
-        }
-        else
-        {
-
-        }
-
-        return b;
+        l.InsertLinker(this);
+        Destroy(rb);
+        gameObject.layer = 7;
+        link = l;
+        PlayerController.Instance.ReleaseCommand();
     }
 }
