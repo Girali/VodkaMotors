@@ -8,7 +8,7 @@ public class Linker : FurniturePiece
     private Link toLink;
     private bool isUsed = false;
 
-    public bool IsUsed { get { return isUsed; } }
+    public bool IsUsed { get => isUsed;  set => isUsed = value; }
     public bool IsLinked { get { return link != null; } }
     public Link Link { get => link; }
     public Link ToLink { get => toLink; set => toLink = value; }

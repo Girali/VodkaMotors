@@ -145,16 +145,10 @@ public class FurniturePiece : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void PlaceComponentInverse(Link f, Link on)
+    public void PlaceComponent(Link where, Link moving)
     {
-        f.PlaceInverse(on);
-        Destroy(f.From.rb);
-    }
-
-    public void PlaceComponent(Link f, Link on)
-    {
-        f.Place(on);
-        Destroy(rb);
+        where.Place(moving);
+        Destroy(moving.From.rb);
     }
 }
 

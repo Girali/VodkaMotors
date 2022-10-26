@@ -14,7 +14,7 @@ public class Link : MonoBehaviour
     private MeshRenderer meshRenderer;
 
     [SerializeField]
-    private LinkNeed[] neededLinks;
+    private Link[] neededLinks;
     private bool glueIn = false;
     private Linker linker = null;
     private Linker linkInZone = null;
@@ -24,13 +24,6 @@ public class Link : MonoBehaviour
     public FurniturePiece From { get => from; }
     public FurniturePiece To { get => to; }
     public Transform Anchor { get => anchor; }
-
-    [System.Serializable]
-    public class LinkNeed
-    {
-        public Link link;
-        public int i;
-    }
 
     public void InsertLinker(Linker l)
     {
@@ -48,44 +41,20 @@ public class Link : MonoBehaviour
         linker = null;
     }
 
-    public void LinkLinks(Link f)
+    public void LinkLinks(Link other)
     {
-        SFX_Controller.Instance.CreateSFX(SFX_Type.PopIn, f.anchor.position, f.anchor.forward);
+        SFX_Controller.Instance.CreateSFX(SFX_Type.PopIn, anchor.position, anchor.forward);
 
-        f.to = from;
-        to = f.from;
+        other.to = from;
+        to = other.from;
 
-        if (f.linker != null)
-        {
-            f.linker.ToLink = this;
-        }
+        if (other.linker != null)
+            other.linker.ToLink = this;
         else
-        {
-            linker.ToLink = f;
-        }
+            linker.ToLink = other;
 
-        f.gameObject.SetActive(false);
+        other.gameObject.SetActive(false);
         gameObject.SetActive(false);
-    }
-
-    public void PlaceInverse(Link f)
-    {
-        from.transform.parent = f.from.transform;
-        from.transform.localRotation = Quaternion.identity;
-
-        from.transform.position = f.anchor.position;
-        from.transform.position += f.anchor.position - anchor.position;
-
-        Transform t = new GameObject("rot").transform;
-
-        t.position = f.anchor.position;
-        t.rotation = Quaternion.LookRotation(-anchor.forward, -anchor.up);
-
-        from.transform.parent = t;
-        t.rotation = f.anchor.rotation;
-
-        from.transform.parent = f.from.transform;
-        Destroy(t.gameObject);
     }
 
     public void Place(Link f)
@@ -159,31 +128,20 @@ public class Link : MonoBehaviour
 
             if (linkerToUse.Link.neededLinks != null)
             {
-                foreach (LinkNeed lnk in linkerToUse.Link.neededLinks)
+                foreach (Link lnk in linkerToUse.Link.neededLinks)
                 {
-                    lnk.link.DetacheLink();
-                    SFX_Controller.Instance.CreateSFX(SFX_Type.PopOut, lnk.link.anchor.position, lnk.link.anchor.forward);
+                    lnk.DetacheLink();
+                    SFX_Controller.Instance.CreateSFX(SFX_Type.PopOut, lnk.anchor.position, lnk.anchor.forward);
                 }
 
-                foreach (LinkNeed lnk in linkerToUse.ToLink.neededLinks)
+                foreach (Link lnk in linkerToUse.ToLink.neededLinks)
                 {
-                    lnk.link.DetacheLink();
+                    lnk.DetacheLink();
                 }
             }
 
             linkerToUse.Link.from.RemoveSet(linkerToUse);
             linkerToUse.ToLink.from.RemoveSet(linkerToUse);
-        }
-    }
-
-
-    public void OnTriggerExit(Collider other)
-    {
-        Linker l = other.GetComponent<Linker>();
-        if (l)
-        {
-            linkInZone = l;
-            inZone = false;
         }
     }
 
@@ -197,40 +155,57 @@ public class Link : MonoBehaviour
         isOk = dotZ < -0.75f;
 
         if (selfLink.neededLinks != null)
-            isOk = dotX < -0.75f;
-
-        Debug.LogError(dotX + "   " + dotZ);
-
-        foreach (LinkNeed h in selfLink.neededLinks)
         {
-            if (h.link.inZone == false)
+            if (selfLink.neededLinks.Length != 0)
             {
-                isOk = false;
-                break;
+                isOk = dotX < -0.75f;
+
+                foreach (Link h in selfLink.neededLinks)
+                {
+                    if (h.inZone == false)
+                    {
+                        isOk = false;
+                        break;
+                    }
+                }
             }
         }
+
+        Debug.LogError(dotX + "   " + (dotZ < -0.75f) + "   " + isOk);
 
         return isOk;
     }
 
     public void PlacePiece(Linker l, Link other)
     {
-        f.AddSet(l, link, this);
-        link.From.AddSet(link, l, this);
+        from.AddSet(this, other, l);
+        other.From.AddSet(other, this, l);
         PlayerController.Instance.ReleaseCommand();
-        f.PlaceComponent(link, l);
-        link.LinkLinks(l);
-        isUsed = true;
+        from.PlaceComponent(other, this);
+        LinkLinks(other);
+
+        if(neededLinks != null && neededLinks.Length != 0)
+        {
+            for (int i = 0; i < neededLinks.Length; i++)
+            {
+                if(neededLinks[i].linker == null)
+                    neededLinks[i].LinkLinks(neededLinks[i].linkInZone.Link);
+                else
+                    neededLinks[i].LinkLinks(neededLinks[i].linker.ToLink);
+            }
+        }
+
+        l.IsUsed = false;
     }
 
-    public void PlacePieceInverse(Linker l, Link other)
+    public void OnTriggerExit(Collider other)
     {
-        f.AddSet(l, link, this);
-        link.From.AddSet(link, l, this);
-        PlayerController.Instance.ReleaseCommand();
-        f.PlaceComponentInverse(link, l);
-        link.LinkLinks(l);
-        isUsed = true;
+        Linker l = other.GetComponent<Linker>();
+        if (l)
+        {
+            linkInZone = l;
+            inZone = false;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -274,7 +249,7 @@ public class Link : MonoBehaviour
                         {
                             if (AuthorizeLink(l.Link, this))
                             {
-                                l.Link.PlacePieceInverse(l, this);
+                                l.Link.PlacePiece(l, this);
                             }
                         }
                     }
