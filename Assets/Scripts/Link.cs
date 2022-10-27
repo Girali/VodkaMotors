@@ -109,39 +109,85 @@ public class Link : MonoBehaviour
         }
     }
 
-    public void Detache(FurniturePiece on)
+    public void Detache()
     {
         if (to != null)
         {
             from.AddForceNextPhysFrame(anchor.position, -anchor.forward * 200f);
 
             Linker linkerToUse = null;
+            Link otherLink = null;
 
             if (linker)
-                linkerToUse = linker;
-            else
-                linkerToUse = on.FindSetByFromLink(this).linker;
-
-            linkerToUse.Link.DetacheLink();
-            linkerToUse.ToLink.DetacheLink();
-            SFX_Controller.Instance.CreateSFX(SFX_Type.PopOut, anchor.position, anchor.forward);
-
-            if (linkerToUse.Link.neededLinks != null)
             {
-                foreach (Link lnk in linkerToUse.Link.neededLinks)
-                {
-                    lnk.DetacheLink();
-                    SFX_Controller.Instance.CreateSFX(SFX_Type.PopOut, lnk.anchor.position, lnk.anchor.forward);
-                }
+                //I got the linker of this link
+                linkerToUse = linker;
+                otherLink = linkerToUse.ToLink;
+            }
+            else
+            {
+                //The linker is on the other side
+                linkerToUse = to.FindSetByToLink(this).linker;
+                otherLink = linkerToUse.Origine;
+            }
 
-                foreach (Link lnk in linkerToUse.ToLink.neededLinks)
+            if (neededLinks != null && neededLinks.Length != 0)
+            {
+                foreach (Link lnk in neededLinks)
                 {
-                    lnk.DetacheLink();
+                    if (lnk.to != null)
+                    {
+                        FurniturePiece.LinkSet set = null;
+                        if (lnk.linker == null)
+                        {
+                            set = lnk.to.FindSetByToLink(lnk);
+                        }
+                        else
+                        {
+                            set = new FurniturePiece.LinkSet(lnk, lnk.linker.ToLink, lnk.linker);
+                        }
+                        set.from.DetacheLink();
+                        set.to.DetacheLink();
+
+                        SFX_Controller.Instance.CreateSFX(SFX_Type.PopOut, set.from.anchor.position, set.from.anchor.forward);
+
+                        set.linker.Origine.from.RemoveSet(set.linker);
+                        set.linker.ToLink.from.RemoveSet(set.linker);
+                    }
+                }
+            }
+            else if (otherLink.neededLinks != null && otherLink.neededLinks.Length != 0)
+            {
+                
+                FurniturePiece.LinkSet[] sets = otherLink.from.FindAllOtherLinkAttachedToPiece(from);
+                foreach (Link lnk in otherLink.neededLinks)
+                {
+                    foreach (FurniturePiece.LinkSet set in sets)
+                    {
+                        Debug.LogError(lnk.from.name + "  " + lnk.to.name + "   " + lnk.linker.name);
+                        Debug.LogError(set.Print() + " -  -- --- --  --");
+
+                        if (set.from == lnk)
+                        {
+                            set.from.DetacheLink();
+                            set.to.DetacheLink();
+
+                            SFX_Controller.Instance.CreateSFX(SFX_Type.PopOut, set.from.anchor.position, set.from.anchor.forward);
+
+                            set.linker.Origine.from.RemoveSet(set.linker);
+                            set.linker.ToLink.from.RemoveSet(set.linker);
+                        }
+                    }
                 }
             }
 
-            linkerToUse.Link.from.RemoveSet(linkerToUse);
+            SFX_Controller.Instance.CreateSFX(SFX_Type.PopOut, anchor.position, anchor.forward);
+
+            linkerToUse.Origine.from.RemoveSet(linkerToUse);
             linkerToUse.ToLink.from.RemoveSet(linkerToUse);
+
+            linkerToUse.Origine.DetacheLink();
+            linkerToUse.ToLink.DetacheLink();
         }
     }
 
@@ -179,7 +225,7 @@ public class Link : MonoBehaviour
     public void PlacePiece(Linker l, Link other)
     {
         from.AddSet(this, other, l);
-        other.From.AddSet(other, this, l);
+        other.from.AddSet(other, this, l);
         PlayerController.Instance.ReleaseCommand();
         from.PlaceComponent(other, this);
         LinkLinks(other);
@@ -188,14 +234,26 @@ public class Link : MonoBehaviour
         {
             for (int i = 0; i < neededLinks.Length; i++)
             {
-                if(neededLinks[i].linker == null)
-                    neededLinks[i].LinkLinks(neededLinks[i].linkInZone.Link);
+                if (neededLinks[i].linker == null)
+                {
+                    neededLinks[i].LinkLinks(neededLinks[i].linkInZone.Origine);
+
+                    neededLinks[i].from.AddSet(neededLinks[i], neededLinks[i].linkInZone.Origine, neededLinks[i].linkInZone);
+                    neededLinks[i].linkInZone.Origine.from.AddSet(neededLinks[i].linkInZone.Origine, neededLinks[i], neededLinks[i].linkInZone);
+                    neededLinks[i].linkInZone.IsUsed = true;
+                }
                 else
+                {
                     neededLinks[i].LinkLinks(neededLinks[i].linker.ToLink);
+
+                    neededLinks[i].from.AddSet(neededLinks[i], neededLinks[i].linker.ToLink, neededLinks[i].linker);
+                    neededLinks[i].linker.ToLink.from.AddSet(neededLinks[i].linker.ToLink, neededLinks[i], neededLinks[i].linker);
+                    neededLinks[i].linker.IsUsed = true;
+                }
             }
         }
 
-        l.IsUsed = false;
+        l.IsUsed = true;
     }
 
     public void OnTriggerExit(Collider other)
@@ -227,9 +285,9 @@ public class Link : MonoBehaviour
                     {
                         if (!l.IsGrabed)
                         {
-                            if (AuthorizeLink(this, l.Link))
+                            if (AuthorizeLink(this, l.Origine))
                             {
-                                this.PlacePiece(l, l.Link);
+                                this.PlacePiece(l, l.Origine);
                             }
                         }
                     }
@@ -247,9 +305,9 @@ public class Link : MonoBehaviour
                     {
                         if (l.IsGrabed)
                         {
-                            if (AuthorizeLink(l.Link, this))
+                            if (AuthorizeLink(l.Origine, this))
                             {
-                                l.Link.PlacePiece(l, this);
+                                l.Origine.PlacePiece(l, this);
                             }
                         }
                     }

@@ -24,17 +24,38 @@ public class FurniturePiece : MonoBehaviour
     {
         linkSets.RemoveAll((h) => h.IsEqual(l));
     }
+    
+    public LinkSet[] FindAllOtherLinkAttachedToPiece(FurniturePiece f)
+    {
+        return linkSets.FindAll((h) => h.to.To == f).ToArray();
+    }
 
     public LinkSet FindSetByFromLink(Link l)
+    {
+        return linkSets.Find((h) => h.IsEqualFrom(l));
+    }
+
+    public LinkSet FindSetByLink(Link l)
     {
         return linkSets.Find((h) => h.IsEqual(l));
     }
 
+    public LinkSet FindSetByToLink(Link l)
+    {
+        return linkSets.Find((h) => h.IsEqualTo(l));
+    }
+
+    [System.Serializable]
     public class LinkSet
     {
         public Link from;
         public Link to;
         public Linker linker;
+
+        public string Print()
+        {
+            return from.name + "  " + to.From + "  " + linker.name;
+        }
 
         public LinkSet(Link from, Link to, Linker linker)
         {
@@ -43,9 +64,19 @@ public class FurniturePiece : MonoBehaviour
             this.linker = linker;
         }
 
-        public bool IsEqual(Link f)
+        public bool IsEqualTo(Link f)
+        {
+            return  f == to;
+        }
+
+        public bool IsEqualFrom(Link f)
         {
             return f == from;
+        }
+
+        public bool IsEqual(Link f)
+        {
+            return f == from || f == to;
         }
 
         public bool IsEqual(Linker l)
@@ -100,7 +131,7 @@ public class FurniturePiece : MonoBehaviour
             li.From.AddRigidbody();
             li.To.AddRigidbody();
 
-            li.Detache(this);
+            li.Detache();
         }
     }
 

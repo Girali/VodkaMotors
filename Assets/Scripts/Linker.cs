@@ -10,7 +10,7 @@ public class Linker : FurniturePiece
 
     public bool IsUsed { get => isUsed;  set => isUsed = value; }
     public bool IsLinked { get { return link != null; } }
-    public Link Link { get => link; }
+    public Link Origine { get => link; }
     public Link ToLink { get => toLink; set => toLink = value; }
 
     public override void DetachePiece(Vector3 v)
@@ -30,7 +30,7 @@ public class Linker : FurniturePiece
             if (link)
             {
                 SFX_Controller.Instance.CreateSFX(SFX_Type.PopOut, transform.position, transform.forward);
-                link.InsertLinker(null);
+                link.RemoveLinker();
                 link.gameObject.SetActive(true);
                 link = null;
                 toLink = null;
