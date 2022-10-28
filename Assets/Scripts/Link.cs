@@ -162,20 +162,20 @@ public class Link : MonoBehaviour
                 FurniturePiece.LinkSet[] sets = otherLink.from.FindAllOtherLinkAttachedToPiece(from);
                 foreach (Link lnk in otherLink.neededLinks)
                 {
-                    foreach (FurniturePiece.LinkSet set in sets)
+                    if (lnk.to != null)
                     {
-                        Debug.LogError(lnk.from.name + "  " + lnk.to.name + "   " + lnk.linker.name);
-                        Debug.LogError(set.Print() + " -  -- --- --  --");
-
-                        if (set.from == lnk)
+                        foreach (FurniturePiece.LinkSet set in sets)
                         {
-                            set.from.DetacheLink();
-                            set.to.DetacheLink();
+                            if (set.from == lnk)
+                            {
+                                set.from.DetacheLink();
+                                set.to.DetacheLink();
 
-                            SFX_Controller.Instance.CreateSFX(SFX_Type.PopOut, set.from.anchor.position, set.from.anchor.forward);
+                                SFX_Controller.Instance.CreateSFX(SFX_Type.PopOut, set.from.anchor.position, set.from.anchor.forward);
 
-                            set.linker.Origine.from.RemoveSet(set.linker);
-                            set.linker.ToLink.from.RemoveSet(set.linker);
+                                set.linker.Origine.from.RemoveSet(set.linker);
+                                set.linker.ToLink.from.RemoveSet(set.linker);
+                            }
                         }
                     }
                 }
@@ -216,8 +216,6 @@ public class Link : MonoBehaviour
                 }
             }
         }
-
-        Debug.LogError(dotX + "   " + (dotZ < -0.75f) + "   " + isOk);
 
         return isOk;
     }

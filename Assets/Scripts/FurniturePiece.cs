@@ -27,7 +27,9 @@ public class FurniturePiece : MonoBehaviour
     
     public LinkSet[] FindAllOtherLinkAttachedToPiece(FurniturePiece f)
     {
-        return linkSets.FindAll((h) => h.to.To == f).ToArray();
+        Debug.LogError(name);
+
+        return linkSets.FindAll((h) => h.to.From == f).ToArray();
     }
 
     public LinkSet FindSetByFromLink(Link l)
