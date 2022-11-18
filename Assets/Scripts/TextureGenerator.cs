@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class TextureGenerator {
 
@@ -25,6 +26,45 @@ public static class TextureGenerator {
 		}
 
 		return TextureFromColourMap (colourMap, width, height);
+	}
+
+	public static Texture2D TextureFromStructureData(List<StructureGenerator.StructureData> data, int size)
+	{
+		int width = size;
+		int height = size;
+
+		Color[] colourMap = new Color[width * height];
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				colourMap[y * width + x] = Color.black;
+			}
+		}
+
+        foreach (StructureGenerator.StructureData d in data)
+        {
+            switch (d.structureType)
+            {
+                case StructureGenerator.StructureType.MissionPoint:
+					colourMap[(int)d.position.y * width + (int)d.position.x] = Color.red;
+                    break;
+				case StructureGenerator.StructureType.MinorRessourcePoint:
+					colourMap[(int)d.position.y * width + (int)d.position.x] = Color.yellow;
+                    break;
+				case StructureGenerator.StructureType.MajorRessourcePoint:
+					colourMap[(int)d.position.y * width + (int)d.position.x] = Color.cyan;
+                    break;
+				case StructureGenerator.StructureType.Details:
+					colourMap[(int)d.position.y * width + (int)d.position.x] = Color.green;
+                    break;
+				default:
+                    break;
+            }
+
+		}
+
+		return TextureFromColourMap(colourMap, width, height);
 	}
 
 }

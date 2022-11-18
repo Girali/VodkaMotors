@@ -21,6 +21,9 @@ public class EndlessTerrain : MonoBehaviour {
 	int chunkSize;
 	public int chunksVisibleInViewDst = 2;
 
+	int startedChucnks = 0;
+	int finishedChunks = 0;
+
 	Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
 	static List<TerrainChunk> terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
 
@@ -31,14 +34,6 @@ public class EndlessTerrain : MonoBehaviour {
 		chunkSize = MapGenerator.mapChunkSize - 1;
 
 		UpdateVisibleChunks ();
-	}
-
-	void Update() {
-		viewerPosition = Vector2.zero;
-		if ((viewerPositionOld - viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate) {
-			viewerPositionOld = viewerPosition;
-			UpdateVisibleChunks ();
-		}
 	}
 		
 	void UpdateVisibleChunks() {
@@ -58,11 +53,26 @@ public class EndlessTerrain : MonoBehaviour {
 				if (terrainChunkDictionary.ContainsKey (viewedChunkCoord)) {
 					terrainChunkDictionary [viewedChunkCoord].UpdateTerrainChunk ();
 				} else {
-					terrainChunkDictionary.Add (viewedChunkCoord, new TerrainChunk (viewedChunkCoord, chunkSize, detailLevels, transform, mapMaterial));
+					terrainChunkDictionary.Add (viewedChunkCoord, new TerrainChunk (viewedChunkCoord, chunkSize, detailLevels, transform, mapMaterial, ChunckLoadFinished));
+					startedChucnks++;
 				}
 
 			}
 		}
+	}
+
+	public void ChunckLoadFinished()
+    {
+		finishedChunks++;
+		if(startedChucnks== finishedChunks)
+        {
+			AllChuncksLoaded();
+		}
+    }
+
+	public void AllChuncksLoaded()
+    {
+		GetComponent<StructureGenerator>().GenerateStrucutreMap();
 	}
 
 	public class TerrainChunk {
@@ -83,9 +93,11 @@ public class EndlessTerrain : MonoBehaviour {
 		bool mapDataReceived;
 		int previousLODIndex = -1;
 
-		public TerrainChunk(Vector2 coord, int size, LODInfo[] detailLevels, Transform parent, Material material) {
-			this.detailLevels = detailLevels;
+		System.Action onFinishCallback;
 
+		public TerrainChunk(Vector2 coord, int size, LODInfo[] detailLevels, Transform parent, Material material, System.Action callback) {
+			this.detailLevels = detailLevels;
+			onFinishCallback = callback;
 			position = coord * size;
 			bounds = new Bounds(position,Vector2.one * size);
 			Vector3 positionV3 = new Vector3(position.x,0,position.y);
@@ -120,9 +132,8 @@ public class EndlessTerrain : MonoBehaviour {
 			meshRenderer.material.mainTexture = texture;
 
 			UpdateTerrainChunk ();
+			onFinishCallback();
 		}
-
-	
 
 		public void UpdateTerrainChunk() {
 			if (mapDataReceived) {

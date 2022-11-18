@@ -35,6 +35,19 @@ public class MapGenerator : MonoBehaviour {
 	public TerrainType[] regions;
 	static MapGenerator instance;
 
+	public static MapGenerator Instance
+    {
+        get
+        {
+			if (instance == null)
+			{
+				instance = FindObjectOfType<MapGenerator>();
+			}
+
+			return instance;
+		}
+    }
+
 	float[,] falloffMap;
 
 	Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
@@ -46,11 +59,7 @@ public class MapGenerator : MonoBehaviour {
 
 	public static int mapChunkSize {
 		get {
-			if (instance == null) {
-				instance = FindObjectOfType<MapGenerator> ();
-			}
-
-			if (instance.useFlatShading) {
+			if (Instance.useFlatShading) {
 				return 95;
 			} else {
 				return 239;
