@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerFootController : MonoBehaviour
 {
+    [SerializeField]
     private Motor currentMotorUsed;
     private PlayerMotor playerMotor;
     public  float sensitivity;
@@ -22,9 +23,13 @@ public class PlayerFootController : MonoBehaviour
     {
         Time.fixedDeltaTime = 1f / 60f;
         Application.targetFrameRate = 60;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         playerMotor = GetComponent<PlayerMotor>();
-        currentMotorUsed = playerMotor;
+
+        if(currentMotorUsed == null)
+            currentMotorUsed = playerMotor;
     }
 
     private float AngleModulo(float value)

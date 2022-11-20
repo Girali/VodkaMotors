@@ -16,16 +16,25 @@ public class EndlessTerrain : MonoBehaviour {
 	public Material mapMaterial;
 
 	public static Vector2 viewerPosition;
-	Vector2 viewerPositionOld;
-	static MapGenerator mapGenerator;
-	int chunkSize;
+	private Vector2 viewerPositionOld;
+	private static MapGenerator mapGenerator;
+	private int chunkSize;
 	public int chunksVisibleInViewDst = 2;
 
-	int startedChucnks = 0;
-	int finishedChunks = 0;
+	private int startedChucnks = 0;
+	private int finishedChunks = 0;
 
-	Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
-	static List<TerrainChunk> terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
+	public float FindPoint(Vector2 worldPoint)
+    {
+		int currentChunkCoordX = Mathf.RoundToInt(worldPoint.x / chunkSize);
+		int currentChunkCoordY = Mathf.RoundToInt(worldPoint.y / chunkSize);
+		Vector2 viewedChunkCoord = new Vector2 (currentChunkCoordX, currentChunkCoordY);
+		Vector2 cordList = worldPoint - (chunkSize * viewedChunkCoord);
+		return terrainChunkDictionary [viewedChunkCoord].mapData.heightMap[(int)cordList.x, (int)cordList.y];
+	}
+
+	private Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
+	private static List<TerrainChunk> terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
 
 	void Start() {
 		mapGenerator = FindObjectOfType<MapGenerator> ();
@@ -56,7 +65,6 @@ public class EndlessTerrain : MonoBehaviour {
 					terrainChunkDictionary.Add (viewedChunkCoord, new TerrainChunk (viewedChunkCoord, chunkSize, detailLevels, transform, mapMaterial, ChunckLoadFinished));
 					startedChucnks++;
 				}
-
 			}
 		}
 	}
@@ -89,7 +97,7 @@ public class EndlessTerrain : MonoBehaviour {
 		LODMesh[] lodMeshes;
 		LODMesh collisionLODMesh;
 
-		MapData mapData;
+		public MapData mapData;
 		bool mapDataReceived;
 		int previousLODIndex = -1;
 

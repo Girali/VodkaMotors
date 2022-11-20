@@ -13,7 +13,6 @@ public class PlayerMotor : Motor
     private bool grounded = false;
     private bool jumpPressed = false;
     private float gravity;
-    private Rigidbody rb;
     private int physicMask = 0;
     private float frameGravity;
     private bool raycast = false;
@@ -24,9 +23,9 @@ public class PlayerMotor : Motor
     private Vector3 lastVelocity;
     private bool fixedWasCalled = false;
 
-    private void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        base.Start();
         frameGravity = Physics.gravity.y * Time.fixedDeltaTime;
         physicMask = LayerMask.GetMask("Default");
     }
@@ -160,7 +159,8 @@ public class PlayerMotor : Motor
         {
             if (jumpPressed == false && canJump)
             {
-                Jump();
+                if(grounded)
+                    Jump();
             }
         }
         else

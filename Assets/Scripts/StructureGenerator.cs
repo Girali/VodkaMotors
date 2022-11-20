@@ -84,6 +84,8 @@ public class StructureGenerator : MonoBehaviour
                 }
             }
         }
+
+        GameController.Instance.WorldGenFinished();
     }
 
     public List<StructureData> GenerateStructrePlacements(float[,] noiseMap)
