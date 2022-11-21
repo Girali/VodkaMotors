@@ -28,6 +28,7 @@ public class PlayerMotor : Motor
         base.Start();
         frameGravity = Physics.gravity.y * Time.fixedDeltaTime;
         physicMask = LayerMask.GetMask("Default");
+        gravity += frameGravity;
     }
 
     public void NextFramePos(Vector3 v)

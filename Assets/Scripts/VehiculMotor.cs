@@ -5,41 +5,67 @@ using UnityEngine;
 public class VehiculMotor : Motor
 {
     [SerializeField]
-    private GameObject[] frontWheels;
+    private WheelCollider[] frontWheels;
     [SerializeField]
-    private GameObject[] rearWheels;
+    private WheelCollider[] rearWheels;
 
-    [SerializeField]
-    private GameObject[] stearAxes;
-    private float[] stearAxesAngles;
+    private WheelFrictionCurve[] rearWheelFrictionCurves;
 
     [SerializeField]
     private float maxStearAngle = 10;
     private float currentStearAngle = 0;
     [SerializeField, Range(0f, 0.1f)]
     private float lerpStearSpeed = 0;
-    [SerializeField]
-    private float turnForce = 5;
-    [SerializeField]
-    private float turnTorque = 5;
-
-    [SerializeField]
-    private Transform forceAxe;
 
     [SerializeField]
     private float maxSpeedTarget = 5;
     private float currentSpeed = 0;
-    [SerializeField, Range(0f,0.01f)]
+    [SerializeField, Range(0f,0.1f)]
     private float lerpSpeedSpeed = 0;
+
     [SerializeField]
-    private float acceleration = 5;
+    private float driftForce = 0.1f;
+
+    [SerializeField]
+    private float breakForce = 100;
+    [SerializeField]
+    private float motorBreak = 100;
+    private bool inUse = false;
+
+    public void EnterVehicul()
+    {
+        inUse = true;
+    }
+
+    public void ExitVehicul()
+    {
+        inUse = false;
+    }
 
     protected override void Start()
     {
         base.Start();
-        stearAxesAngles = new float[2];
-        stearAxesAngles[0] = stearAxes[0].transform.localRotation.eulerAngles.y;
-        stearAxesAngles[1] = stearAxes[1].transform.localRotation.eulerAngles.y;
+        rearWheelFrictionCurves = new WheelFrictionCurve[2];
+        rearWheelFrictionCurves[0] = rearWheels[0].sidewaysFriction;
+        rearWheelFrictionCurves[1] = rearWheels[1].sidewaysFriction;
+    }
+
+    public void Update()
+    {
+        if (!inUse)
+        {
+            frontWheels[0].brakeTorque = breakForce;
+            frontWheels[1].brakeTorque = breakForce;
+            rearWheels[0].brakeTorque = breakForce;
+            rearWheels[1].brakeTorque = breakForce;
+        }
+        else
+        {
+            frontWheels[0].brakeTorque = motorBreak;
+            frontWheels[1].brakeTorque = motorBreak;
+            rearWheels[0].brakeTorque = motorBreak;
+            rearWheels[1].brakeTorque = motorBreak;
+        }
     }
 
     public override void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch)
@@ -54,24 +80,31 @@ public class VehiculMotor : Motor
 
         float t1 = 0;
         if (left ^ right)
-            t1 = left ? maxStearAngle : -maxStearAngle;
+            t1 = left ? -maxStearAngle : maxStearAngle;
 
         currentStearAngle = Mathf.Lerp(currentStearAngle, t1, lerpStearSpeed);
 
-        stearAxes[0].transform.localRotation = Quaternion.Euler(0, currentStearAngle + stearAxesAngles[0], 0);
-        stearAxes[1].transform.localRotation = Quaternion.Euler(0, currentStearAngle + stearAxesAngles[1], 0);
+        if (jump)
+        {
+            rearWheelFrictionCurves[0].stiffness = driftForce;
+            rearWheelFrictionCurves[1].stiffness = driftForce;
+        }
+        else
+        {
+            rearWheelFrictionCurves[0].stiffness = 1;
+            rearWheelFrictionCurves[1].stiffness = 1;
+        } 
 
-        frontWheels[0].transform.Rotate(Vector3.forward * currentSpeed);
-        frontWheels[1].transform.Rotate(-Vector3.forward * currentSpeed);
+        rearWheels[0].sidewaysFriction = rearWheelFrictionCurves[0];
+        rearWheels[1].sidewaysFriction = rearWheelFrictionCurves[1];
 
-        rearWheels[0].transform.Rotate(Vector3.forward * currentSpeed);
-        rearWheels[1].transform.Rotate(-Vector3.forward * currentSpeed);
+        frontWheels[0].motorTorque = currentSpeed;
+        frontWheels[1].motorTorque = currentSpeed;
 
-        //Vector3 moveDir = Vector3.forward * currentSpeed;
-        //moveDir.y = rb.velocity.y;
-        //rb.velocity = moveDir;
-        //rb.AddForce(transform.forward * currentSpeed * acceleration, ForceMode.Impulse);
-        //rb.AddTorque(transform.up * currentSpeed * currentStearAngle * turnTorque, ForceMode.Impulse);
-        //rb.AddForceAtPosition(forceAxe.right * currentSpeed * currentStearAngle * turnForce, forceAxe.position, ForceMode.Impulse);
+        rearWheels[0].motorTorque = currentSpeed;
+        rearWheels[1].motorTorque = currentSpeed;
+
+        frontWheels[0].steerAngle = currentStearAngle;
+        frontWheels[1].steerAngle = currentStearAngle;
     }
 }
