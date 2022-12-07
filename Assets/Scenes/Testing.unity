@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -163,8 +163,9 @@ MonoBehaviour:
   lerpStearSpeed: 0.1
   maxSpeedTarget: 900
   lerpSpeedSpeed: 0.1
-  breakForce: 100
   driftForce: 0.1
+  breakForce: 100
+  motorBreak: 100
 --- !u!4 &160231877
 Transform:
   m_ObjectHideFlags: 0
@@ -4332,7 +4333,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8213288671893800852, guid: 8adabe4a934d36c4da553dc728f1ceb1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8adabe4a934d36c4da553dc728f1ceb1, type: 3}
