@@ -11,7 +11,7 @@ public class Motor : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public virtual void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch)
+    public virtual void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch, RaycastHit hit)
     {
 
     }

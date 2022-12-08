@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class PlayerMotor : Motor
 {
-    public Camera cam;
-    public float jumpForce = 5f;
-    public float walkSpeed = 5f;
-    public float sprintSpeed = 10f;
+    [SerializeField]
+    private Camera cam;
+    [SerializeField]
+    private float jumpForce = 5f;
+    [SerializeField]
+    private float walkSpeed = 5f;
+    [SerializeField]
+    private float sprintSpeed = 10f;
     private Vector3 movingDir;
     private bool canJump = true;
     private bool grounded = false;
@@ -29,6 +33,13 @@ public class PlayerMotor : Motor
         frameGravity = Physics.gravity.y * Time.fixedDeltaTime;
         physicMask = LayerMask.GetMask("Default");
         gravity += frameGravity;
+    }
+
+    public void ApplyPreset(Rigidbody rb)
+    {
+        rb.mass = 60;
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     public void NextFramePos(Vector3 v)
@@ -128,9 +139,9 @@ public class PlayerMotor : Motor
         canJump = true;
     }
 
-    public override void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch)
+    public override void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch, RaycastHit hit)
     {
-        base.Move(forward, backward, left, right, jump, sprint, yaw, pitch);
+        base.Move(forward, backward, left, right, jump, sprint, yaw, pitch,hit);
         //gravity
         movingDir = Vector3.zero;
 

@@ -32,6 +32,7 @@ public class VehiculMotor : Motor
     private float motorBreak = 100;
     private bool inUse = false;
 
+
     public void EnterVehicul()
     {
         inUse = true;

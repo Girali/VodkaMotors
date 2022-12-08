@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerFootController : MonoBehaviour
 {
     [SerializeField]
+    private Camera cam;
+    [SerializeField]
     private Motor currentMotorUsed;
     private PlayerMotor playerMotor;
     public  float sensitivity;
@@ -19,12 +21,18 @@ public class PlayerFootController : MonoBehaviour
     private float xMouse;
     private float yMouse;
 
+    private int interactLayer;
+
+    
+
     private void Start()
     {
         Time.fixedDeltaTime = 1f / 60f;
         Application.targetFrameRate = 60;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        interactLayer = LayerMask.GetMask("Interactable");
 
         playerMotor = GetComponent<PlayerMotor>();
 
@@ -59,6 +67,10 @@ public class PlayerFootController : MonoBehaviour
     private void Update()
     {
         PoolKeys();
-        currentMotorUsed.Move(forward, backward, left, right, jump, sprint, yaw, pitch);
+
+        RaycastHit hit;
+        Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, 4f, interactLayer);
+
+        currentMotorUsed.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit);
     }
 }
