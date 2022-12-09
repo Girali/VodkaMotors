@@ -27,12 +27,16 @@ public class PlayerMotor : Motor
     private Vector3 lastVelocity;
     private bool fixedWasCalled = false;
 
+    [SerializeField]
+    private PlayerAnimation playerAnimation;
+
     protected override void Start()
     {
         base.Start();
         frameGravity = Physics.gravity.y * Time.fixedDeltaTime;
         physicMask = LayerMask.GetMask("Default");
         gravity += frameGravity;
+        camInitialPos = cam.transform.localPosition;
     }
 
     public void ApplyPreset(Rigidbody rb)
@@ -55,20 +59,20 @@ public class PlayerMotor : Motor
         cam.transform.localPosition = camInitialPos;
     }
 
-    private void Update()
-    {
-        if (usePhysicsInterpolate)
-        {
-            if (fixedWasCalled)
-            {
-                fixedWasCalled = false;
-            }
-            else
-            {
-                NextFramePos(lastVelocity * 0.5f);
-            }
-        }
-    }
+   //private void Update()
+   //{
+   //    if (usePhysicsInterpolate)
+   //    {
+   //        if (fixedWasCalled)
+   //        {
+   //            fixedWasCalled = false;
+   //        }
+   //        else
+   //        {
+   //            NextFramePos(lastVelocity * 0.5f);
+   //        }
+   //    }
+   //}
 
     private void FixedUpdate()
     {
@@ -102,6 +106,7 @@ public class PlayerMotor : Motor
             {
                 gravity = 0;
                 grounded = true;
+                playerAnimation.Fall(false);
             }
         }
         else
@@ -109,6 +114,7 @@ public class PlayerMotor : Motor
             if (grounded)
             {
                 grounded = false;
+                playerAnimation.Fall(true);
                 gravity += frameGravity;
             }
         }
@@ -129,6 +135,7 @@ public class PlayerMotor : Motor
         gravity = 0;
 
         grounded = false;
+        playerAnimation.Fall(true);
 
         gravity += jumpForce;
     }
@@ -145,15 +152,21 @@ public class PlayerMotor : Motor
         //gravity
         movingDir = Vector3.zero;
 
+        Vector2 v = Vector2.zero;
+
         if (forward ^ backward)
         {
             movingDir += forward ? transform.forward : -transform.forward;
+            v = new Vector2(v.x, forward ? 1 : -1);
         }
 
         if (left ^ right)
         {
             movingDir += right ? transform.right : -transform.right;
+            v = new Vector2(right ? 1 : -1, v.y);
         }
+
+        playerAnimation.Run(v);
 
         movingDir.Normalize();
 

@@ -69,9 +69,9 @@ public class VehiculMotor : Motor
         }
     }
 
-    public override void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch)
+    public override void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch, RaycastHit hit)
     {
-        base.Move(forward, backward, left, right, jump, sprint, yaw, pitch);
+        base.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit);
 
         float t2 = 0;
         if (forward ^ backward)
