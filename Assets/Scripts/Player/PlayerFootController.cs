@@ -7,7 +7,7 @@ public class PlayerFootController : MonoBehaviour
     [SerializeField]
     private Camera cam;
     [SerializeField]
-    private Motor currentMotorUsed;
+    private VehiculMotor vehiculMotor;
     private PlayerMotor playerMotor;
     public  float sensitivity;
     private bool forward;
@@ -20,10 +20,23 @@ public class PlayerFootController : MonoBehaviour
     private float pitch;
     private float xMouse;
     private float yMouse;
-
+    private bool interact;
+    private bool vodka;
     private int interactLayer;
 
-    
+    public void SetNewMotor(VehiculMotor m)
+    {
+        if(m== null)
+        {
+            vehiculMotor.ExitVehicul();
+        }
+        else
+        {
+            m.EnterVehicul();
+        }
+
+        vehiculMotor = m;
+    }
 
     private void Start()
     {
@@ -35,9 +48,6 @@ public class PlayerFootController : MonoBehaviour
         interactLayer = LayerMask.GetMask("Interactable");
 
         playerMotor = GetComponent<PlayerMotor>();
-
-        if(currentMotorUsed == null)
-            currentMotorUsed = playerMotor;
     }
 
     private float AngleModulo(float value)
@@ -56,6 +66,8 @@ public class PlayerFootController : MonoBehaviour
         backward = Input.GetKey(KeyCode.S);
         left = Input.GetKey(KeyCode.A);
         right = Input.GetKey(KeyCode.D);
+        vodka = Input.GetKey(KeyCode.V);
+        interact = Input.GetKeyDown(KeyCode.E);
         jump = Input.GetKey(KeyCode.Space);
         sprint = Input.GetKey(KeyCode.LeftShift);
 
@@ -71,6 +83,9 @@ public class PlayerFootController : MonoBehaviour
         RaycastHit hit;
         Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, 4f, interactLayer);
 
-        currentMotorUsed.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit);
+        playerMotor.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit, interact);
+
+        if(vehiculMotor != null)
+            vehiculMotor.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit, interact);
     }
 }

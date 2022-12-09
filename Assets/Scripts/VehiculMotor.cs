@@ -31,16 +31,27 @@ public class VehiculMotor : Motor
     [SerializeField]
     private float motorBreak = 100;
     private bool inUse = false;
-
+    [SerializeField]
+    private float thresholdAutoCorrect = 20;
+    [SerializeField]
+    private float powerAutoCorrect = 20;
 
     public void EnterVehicul()
     {
         inUse = true;
+        frontWheels[0].brakeTorque = 0;
+        frontWheels[1].brakeTorque = 0;
+        rearWheels[0].brakeTorque = 0;
+        rearWheels[1].brakeTorque = 0;
     }
 
     public void ExitVehicul()
     {
         inUse = false;
+        frontWheels[0].brakeTorque = breakForce;
+        frontWheels[1].brakeTorque = breakForce;
+        rearWheels[0].brakeTorque = breakForce;
+        rearWheels[1].brakeTorque = breakForce;
     }
 
     protected override void Start()
@@ -49,29 +60,45 @@ public class VehiculMotor : Motor
         rearWheelFrictionCurves = new WheelFrictionCurve[2];
         rearWheelFrictionCurves[0] = rearWheels[0].sidewaysFriction;
         rearWheelFrictionCurves[1] = rearWheels[1].sidewaysFriction;
+
+        frontWheels[0].brakeTorque = breakForce;
+        frontWheels[1].brakeTorque = breakForce;
+        rearWheels[0].brakeTorque = breakForce;
+        rearWheels[1].brakeTorque = breakForce;
     }
 
     public void Update()
     {
         if (!inUse)
         {
-            frontWheels[0].brakeTorque = breakForce;
-            frontWheels[1].brakeTorque = breakForce;
-            rearWheels[0].brakeTorque = breakForce;
-            rearWheels[1].brakeTorque = breakForce;
+            currentSpeed = Mathf.Lerp(currentSpeed, 0, lerpSpeedSpeed);
+            currentStearAngle = Mathf.Lerp(currentStearAngle, 0, lerpStearSpeed);
+
+            frontWheels[0].motorTorque = currentSpeed;
+            frontWheels[1].motorTorque = currentSpeed;
+
+            rearWheels[0].motorTorque = currentSpeed;
+            rearWheels[1].motorTorque = currentSpeed;
+
+            frontWheels[0].steerAngle = currentStearAngle;
+            frontWheels[1].steerAngle = currentStearAngle;
         }
-        else
+
+
+        float upTilt = transform.eulerAngles.z;
+
+        if (upTilt > 180)
+            upTilt -= 360;
+
+        if(Mathf.Abs(upTilt) > thresholdAutoCorrect)
         {
-            frontWheels[0].brakeTorque = motorBreak;
-            frontWheels[1].brakeTorque = motorBreak;
-            rearWheels[0].brakeTorque = motorBreak;
-            rearWheels[1].brakeTorque = motorBreak;
+            rb.AddRelativeTorque(Vector3.forward * upTilt * powerAutoCorrect, ForceMode.Force);
         }
     }
 
-    public override void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch, RaycastHit hit)
+    public override void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch, RaycastHit hit, bool interact)
     {
-        base.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit);
+        base.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit, interact);
 
         float t2 = 0;
         if (forward ^ backward)
@@ -84,6 +111,33 @@ public class VehiculMotor : Motor
             t1 = left ? -maxStearAngle : maxStearAngle;
 
         currentStearAngle = Mathf.Lerp(currentStearAngle, t1, lerpStearSpeed);
+
+        if (!(forward || backward || left || right))
+        {
+
+            if (jump)
+            {
+                frontWheels[0].brakeTorque = breakForce;
+                frontWheels[1].brakeTorque = breakForce;
+                rearWheels[0].brakeTorque = breakForce;
+                rearWheels[1].brakeTorque = breakForce;
+            }
+            else
+            {
+                frontWheels[0].brakeTorque = motorBreak;
+                frontWheels[1].brakeTorque = motorBreak;
+                rearWheels[0].brakeTorque = motorBreak;
+                rearWheels[1].brakeTorque = motorBreak;
+            }
+        }
+        else
+        {
+            frontWheels[0].brakeTorque = 0;
+            frontWheels[1].brakeTorque = 0;
+            rearWheels[0].brakeTorque = 0;
+            rearWheels[1].brakeTorque = 0;
+        }
+
 
         if (jump)
         {
