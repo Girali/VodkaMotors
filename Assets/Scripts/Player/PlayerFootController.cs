@@ -6,10 +6,11 @@ public class PlayerFootController : MonoBehaviour
 {
     [SerializeField]
     private Camera cam;
-    [SerializeField]
     private VehiculMotor vehiculMotor;
     private PlayerMotor playerMotor;
-    public  float sensitivity;
+    private PlayerInteractController playerInteractController;
+    private PlayerVodkaController playerVodkaController;
+    public float sensitivity;
     private bool forward;
     private bool backward;
     private bool left;
@@ -21,12 +22,18 @@ public class PlayerFootController : MonoBehaviour
     private float xMouse;
     private float yMouse;
     private bool interact;
+    private bool mouse1Down;
+    private bool mouse2Down;
+    private bool mouse1;
+    private bool mouse2;
+    private bool mouse1Up;
+    private bool mouse2Up;
     private bool vodka;
     private int interactLayer;
 
     public void SetNewMotor(VehiculMotor m)
     {
-        if(m== null)
+        if (m == null)
         {
             vehiculMotor.ExitVehicul();
         }
@@ -46,8 +53,9 @@ public class PlayerFootController : MonoBehaviour
         Cursor.visible = false;
 
         interactLayer = LayerMask.GetMask("Interactable");
-
+        playerInteractController = GetComponent<PlayerInteractController>();
         playerMotor = GetComponent<PlayerMotor>();
+        playerVodkaController = GetComponent<PlayerVodkaController>();
     }
 
     private float AngleModulo(float value)
@@ -66,10 +74,17 @@ public class PlayerFootController : MonoBehaviour
         backward = Input.GetKey(KeyCode.S);
         left = Input.GetKey(KeyCode.A);
         right = Input.GetKey(KeyCode.D);
-        vodka = Input.GetKey(KeyCode.V);
+        vodka = Input.GetKeyDown(KeyCode.V);
         interact = Input.GetKeyDown(KeyCode.E);
         jump = Input.GetKey(KeyCode.Space);
         sprint = Input.GetKey(KeyCode.LeftShift);
+
+        mouse1Down = Input.GetMouseButtonDown(0);
+        mouse2Down = Input.GetMouseButtonDown(1);
+        mouse1 = Input.GetMouseButton(0);
+        mouse2 = Input.GetMouseButton(1);
+        mouse1Up = Input.GetMouseButtonUp(0);
+        mouse2Up = Input.GetMouseButtonUp(1);
 
         yaw += xMouse * sensitivity;
         yaw = AngleModulo(yaw);
@@ -85,7 +100,11 @@ public class PlayerFootController : MonoBehaviour
 
         playerMotor.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit, interact);
 
-        if(vehiculMotor != null)
+        playerInteractController.Motor(mouse1Down, mouse1Up, hit);
+        playerVodkaController.Motor(vodka);
+
+
+        if (vehiculMotor != null)
             vehiculMotor.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit, interact);
     }
 }

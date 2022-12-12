@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class WorldStructre : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public virtual void Init()
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

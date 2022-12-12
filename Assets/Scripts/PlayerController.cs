@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
                     {
                         if (hit.rigidbody.GetComponent<FurniturePiece>())
                         {
-                            GUI_Controller.Instance.SetStep(GUI_Controller.HelpStep.Grab);
+                            //GUI_Controller.Instance.SetStep(GUI_Controller.HelpStep.Grab);
                             grabed = hit.rigidbody.GetComponent<FurniturePiece>();
                             hand.transform.position = hit.point;
                             movePlan.position = hit.point;
@@ -136,12 +136,12 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetMouseButton(1))
             {
-                GUI_Controller.Instance.SetStep(GUI_Controller.HelpStep.View);
+                //GUI_Controller.Instance.SetStep(GUI_Controller.HelpStep.View);
                 camPivot.Rotate(Vector3.up, -Input.GetAxis("Mouse X"), Space.World);
             }
 
             if(Input.GetMouseButtonUp(1))
-                GUI_Controller.Instance.SetStep(GUI_Controller.HelpStep.Hand);
+                //GUI_Controller.Instance.SetStep(GUI_Controller.HelpStep.Hand);
 
             if (Input.GetMouseButton(2))
             {
@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour
     {
         if (grabed)
         {
-            GUI_Controller.Instance.SetStep(GUI_Controller.HelpStep.Hand);
+            //GUI_Controller.Instance.SetStep(GUI_Controller.HelpStep.Hand);
             grabed.StopGrab();
             grabed = null;
             hand.connectedBody = null;

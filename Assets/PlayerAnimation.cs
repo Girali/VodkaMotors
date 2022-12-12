@@ -23,6 +23,18 @@ public class PlayerAnimation : MonoBehaviour
         sahdowAnim.SetBool("Driving", b);
     }
 
+    public void Drink()
+    {
+        modelAnim.SetTrigger("Drink");
+        sahdowAnim.SetTrigger("Drink");
+    }
+
+    public void Waking()
+    {
+        modelAnim.SetTrigger("Waking");
+        sahdowAnim.SetTrigger("Waking");
+    }
+
     public void Run(Vector2 v)
     {
         currentRunValue = Vector2.Lerp(currentRunValue, v, lerpTime);

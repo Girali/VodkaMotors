@@ -121,6 +121,8 @@ public class VehiculMotor : Motor
                 frontWheels[1].brakeTorque = breakForce;
                 rearWheels[0].brakeTorque = breakForce;
                 rearWheels[1].brakeTorque = breakForce;
+                rearWheelFrictionCurves[0].stiffness = 1;
+                rearWheelFrictionCurves[1].stiffness = 1;
             }
             else
             {
@@ -128,6 +130,8 @@ public class VehiculMotor : Motor
                 frontWheels[1].brakeTorque = motorBreak;
                 rearWheels[0].brakeTorque = motorBreak;
                 rearWheels[1].brakeTorque = motorBreak;
+                rearWheelFrictionCurves[0].stiffness = 1;
+                rearWheelFrictionCurves[1].stiffness = 1;
             }
         }
         else
@@ -136,19 +140,18 @@ public class VehiculMotor : Motor
             frontWheels[1].brakeTorque = 0;
             rearWheels[0].brakeTorque = 0;
             rearWheels[1].brakeTorque = 0;
-        }
 
-
-        if (jump)
-        {
-            rearWheelFrictionCurves[0].stiffness = driftForce;
-            rearWheelFrictionCurves[1].stiffness = driftForce;
+            if (jump)
+            {
+                rearWheelFrictionCurves[0].stiffness = driftForce;
+                rearWheelFrictionCurves[1].stiffness = driftForce;
+            }
+            else
+            {
+                rearWheelFrictionCurves[0].stiffness = 1;
+                rearWheelFrictionCurves[1].stiffness = 1;
+            }
         }
-        else
-        {
-            rearWheelFrictionCurves[0].stiffness = 1;
-            rearWheelFrictionCurves[1].stiffness = 1;
-        } 
 
         rearWheels[0].sidewaysFriction = rearWheelFrictionCurves[0];
         rearWheels[1].sidewaysFriction = rearWheelFrictionCurves[1];

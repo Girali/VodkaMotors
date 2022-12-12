@@ -30,7 +30,15 @@ public class EndlessTerrain : MonoBehaviour {
 		int currentChunkCoordY = Mathf.RoundToInt(worldPoint.y / chunkSize);
 		Vector2 viewedChunkCoord = new Vector2 (currentChunkCoordX, currentChunkCoordY);
 		Vector2 cordList = worldPoint - (chunkSize * viewedChunkCoord);
-		return terrainChunkDictionary [viewedChunkCoord].mapData.heightMap[(int)cordList.x, (int)cordList.y];
+		try
+		{
+            return terrainChunkDictionary[viewedChunkCoord].mapData.heightMap[(int)cordList.x, (int)cordList.y];
+        }
+        catch (System.Exception)
+		{
+			return 0;
+			throw;
+		}
 	}
 
 	private Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
@@ -80,7 +88,7 @@ public class EndlessTerrain : MonoBehaviour {
 
 	public void AllChuncksLoaded()
     {
-		GetComponent<StructureGenerator>().GenerateStrucutreMap();
+		GetComponent<StructureGenerator>().GenerateStrucutreMap(this);
 	}
 
 	public class TerrainChunk {

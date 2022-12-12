@@ -29,10 +29,10 @@ public class StructureGenerator : MonoBehaviour
 
     public void DrawMapInEditor()
     {
-        GenerateStrucutreMap();
+        GenerateStrucutreMap(null);
     }
 
-    public void GenerateStrucutreMap()
+    public void GenerateStrucutreMap(EndlessTerrain et)
     {
         if (parentStruct)
             DestroyImmediate(parentStruct);
@@ -40,7 +40,7 @@ public class StructureGenerator : MonoBehaviour
         parentStruct = new GameObject("parentStruct").transform;
 
         float[,] noiseMap = Noise.GenerateNoiseMap(mapSize, mapSize, seed, noiseScale, octaves, persistance, lacunarity, offset, normalizeMode);
-        List<StructureData> result = GenerateStructrePlacements(noiseMap);
+        List<StructureData> result = GenerateStructrePlacements(noiseMap, et);
 
         if (preview)
         {
@@ -64,12 +64,14 @@ public class StructureGenerator : MonoBehaviour
                 if (result[i].structureType == structres[j].structureType)
                 {
                     RaycastHit hit;
-                    Physics.Raycast(new Vector3(result[i].position.x, 60, result[i].position.y), Vector3.down, out hit, 100);
+                    Physics.Raycast(new Vector3(result[i].position.x, 30, result[i].position.y), Vector3.down, out hit, 40);
 
                     if (waterLevel < hit.point.y)
                     {
                         int inx = Random.Range(0, structres[j].prefabs.Length);
-                        GameObject g = Instantiate(structres[j].prefabs[inx], parentStruct);
+                        WorldStructre g = Instantiate(structres[j].prefabs[inx], parentStruct).GetComponent<WorldStructre>();
+
+                        g.Init();
 
                         g.transform.position = new Vector3(result[i].position.x, hit.point.y, result[i].position.y);
                         Vector3 frwd = hit.normal;
@@ -79,7 +81,7 @@ public class StructureGenerator : MonoBehaviour
 
                         g.transform.rotation = Quaternion.LookRotation(nrml.normalized , hit.normal);
 
-                        result[i].gameObject = g;
+                        result[i].gameObject = g.gameObject;
                     }
                 }
             }
@@ -88,7 +90,7 @@ public class StructureGenerator : MonoBehaviour
         GameController.Instance.WorldGenFinished();
     }
 
-    public List<StructureData> GenerateStructrePlacements(float[,] noiseMap)
+    public List<StructureData> GenerateStructrePlacements(float[,] noiseMap, EndlessTerrain et)
     {
         int height = noiseMap.GetLength(0);
         int width = noiseMap.GetLength(1);
@@ -119,6 +121,9 @@ public class StructureGenerator : MonoBehaviour
                     densityCount++;
                     foreach (Structure s in structres)
                     {
+                        Vector2 v = new Vector2((xc * 2) - mapSize, (yc * 2) - mapSize);
+                        float f = et.FindPoint(v);
+                            
                         if (densityCount % s.ignoreDensity == 0)
                         {
                             structures.Add(new StructureData() { position = new Vector2((xc * 2) - mapSize, (yc * 2) - mapSize), structureType = s.structureType }) ;

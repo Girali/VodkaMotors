@@ -31,6 +31,8 @@ public class PlayerMotor : Motor
     private Vector3 lastVelocity;
     private bool fixedWasCalled = false;
 
+    private bool stopInteraction = true;
+
     [SerializeField]
     private PlayerAnimation playerAnimation;
 
@@ -40,7 +42,13 @@ public class PlayerMotor : Motor
     [SerializeField]
     private PlayerFootController playerController;
 
-    public bool inVehicul = false; 
+    public bool inVehicul = false;
+
+    private void Awake()
+    {
+        GUI_Controller.Instance.fadeOutLong.Play();
+        playerAnimation.Waking();
+    }
 
     protected override void Start()
     {
@@ -93,6 +101,12 @@ public class PlayerMotor : Motor
     public void ResetFramePos()
     {
         render.transform.localPosition = camInitialPos;
+    }
+
+    public void StartUse()
+    {
+        stopInteraction = false;
+        GUI_Controller.Instance.gui.SetActive(true);
     }
 
     private void Update()
@@ -192,75 +206,78 @@ public class PlayerMotor : Motor
     public override void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch, RaycastHit hit, bool interact)
     {
         base.Move(forward, backward, left, right, jump, sprint, yaw, pitch,hit, interact);
-
-        if (!inVehicul)
+        if (!stopInteraction)
         {
-            //gravity
-            movingDir = Vector3.zero;
 
-            Vector2 v = Vector2.zero;
-
-            if (forward ^ backward)
+            if (!inVehicul)
             {
-                movingDir += forward ? transform.forward : -transform.forward;
-                v = new Vector2(v.x, forward ? 1 : -1);
-            }
+                //gravity
+                movingDir = Vector3.zero;
 
-            if (left ^ right)
-            {
-                movingDir += right ? transform.right : -transform.right;
-                v = new Vector2(right ? 1 : -1, v.y);
-            }
+                Vector2 v = Vector2.zero;
 
-            playerAnimation.Run(v);
-
-            movingDir.Normalize();
-
-            float speed = 0;
-
-            if (sprint)
-                speed = sprintSpeed;
-            else
-                speed = walkSpeed;
-
-            movingDir *= speed;
-
-            //jumping
-            if (jump && jumpForce > 0)
-            {
-                if (jumpPressed == false && canJump)
+                if (forward ^ backward)
                 {
-                    if (grounded)
-                        Jump();
+                    movingDir += forward ? transform.forward : -transform.forward;
+                    v = new Vector2(v.x, forward ? 1 : -1);
+                }
+
+                if (left ^ right)
+                {
+                    movingDir += right ? transform.right : -transform.right;
+                    v = new Vector2(right ? 1 : -1, v.y);
+                }
+
+                playerAnimation.Run(v);
+
+                movingDir.Normalize();
+
+                float speed = 0;
+
+                if (sprint)
+                    speed = sprintSpeed;
+                else
+                    speed = walkSpeed;
+
+                movingDir *= speed;
+
+                //jumping
+                if (jump && jumpForce > 0)
+                {
+                    if (jumpPressed == false && canJump)
+                    {
+                        if (grounded)
+                            Jump();
+                    }
+                }
+                else
+                {
+                    if (jumpPressed)
+                        jumpPressed = false;
+                }
+
+                transform.rotation = Quaternion.Euler(0, yaw, 0);
+                cam.transform.localEulerAngles = new Vector3(pitch, 0, 0f);
+
+                if (interact)
+                {
+                    if (hit.collider)
+                    {
+                        VehiculSit vs = hit.collider.GetComponent<VehiculSit>();
+                        EnterVehicul(vs.sitPosition);
+                        playerController.SetNewMotor(vs.motor);
+                    }
                 }
             }
             else
             {
-                if (jumpPressed)
-                    jumpPressed = false;
-            }
+                cam.transform.localEulerAngles = new Vector3(pitch, yaw, 0f);
 
-            transform.rotation = Quaternion.Euler(0, yaw, 0);
-            cam.transform.localEulerAngles = new Vector3(pitch, 0, 0f);
-
-            if (interact)
-            {
-                if (hit.collider)
+                if (interact)
                 {
-                    VehiculSit vs = hit.collider.GetComponent<VehiculSit>();
-                    EnterVehicul(vs.sitPosition);
-                    playerController.SetNewMotor(vs.motor);
+                    ExitVehicul();
+                    playerController.SetNewMotor(null);
                 }
-            }
-        }
-        else
-        {
-            cam.transform.localEulerAngles = new Vector3(pitch, yaw, 0f);
-
-            if (interact)
-            {
-                ExitVehicul();
-                playerController.SetNewMotor(null);
             }
         }
     }
