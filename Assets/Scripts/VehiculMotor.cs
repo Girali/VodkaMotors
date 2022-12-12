@@ -9,6 +9,9 @@ public class VehiculMotor : Motor
     [SerializeField]
     private WheelCollider[] rearWheels;
 
+    [SerializeField]
+    private MusicController musicController;
+
     private WheelFrictionCurve[] rearWheelFrictionCurves;
 
     [SerializeField]

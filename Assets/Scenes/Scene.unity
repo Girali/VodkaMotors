@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18151088, g: 0.22714855, b: 0.30740118, a: 1}
+  m_IndirectSpecularColor: {r: 0.18151045, g: 0.22714773, b: 0.3074003, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -15283,6 +15283,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4646407613516282, guid: f996731b12085f44883c30318a77c3c8, type: 3}
   m_PrefabInstance: {fileID: 932879045}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1858233469 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8784912431722299468, guid: e9d683bcf5b7efa40972766dbadd1531, type: 3}
+  m_PrefabInstance: {fileID: 1154830573}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1860097074
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16984,6 +16989,17 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 64986660292041380, guid: f996731b12085f44883c30318a77c3c8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f996731b12085f44883c30318a77c3c8, type: 3}
+--- !u!114 &2046937094 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 427108851, guid: 18adab6b32b69984bbf169fa0bb2014e, type: 3}
+  m_PrefabInstance: {fileID: 1937807362}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9f0b37db73247946aa892c377e21e48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2051094693
 GameObject:
   m_ObjectHideFlags: 0
@@ -17737,6 +17753,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameController
       objectReference: {fileID: 0}
+    - target: {fileID: 587598299511334456, guid: bbfd57be74f5a9b408b2e461e86fa934, type: 3}
+      propertyPath: vehicul
+      value: 
+      objectReference: {fileID: 1858233469}
+    - target: {fileID: 587598299511334456, guid: bbfd57be74f5a9b408b2e461e86fa934, type: 3}
+      propertyPath: spawnPoints
+      value: 
+      objectReference: {fileID: 2046937094}
     - target: {fileID: 587598299511334456, guid: bbfd57be74f5a9b408b2e461e86fa934, type: 3}
       propertyPath: playerSpawnPoint
       value: 
