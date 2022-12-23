@@ -54,7 +54,7 @@ public class PlayerMotor : Motor
     {
         base.Start();
         frameGravity = Physics.gravity.y * Time.fixedDeltaTime;
-        physicMask = LayerMask.GetMask("Default");
+        physicMask = LayerMask.GetMask("Default" , "Floor");
         gravity += frameGravity;
         camInitialPos = render.transform.localPosition;
     }
@@ -264,8 +264,11 @@ public class PlayerMotor : Motor
                     if (hit.collider)
                     {
                         VehiculSit vs = hit.collider.GetComponent<VehiculSit>();
-                        EnterVehicul(vs.sitPosition);
-                        playerController.SetNewMotor(vs.motor);
+                        if (vs)
+                        {
+                            EnterVehicul(vs.sitPosition);
+                            playerController.SetNewMotor(vs.motor);
+                        }
                     }
                 }
             }

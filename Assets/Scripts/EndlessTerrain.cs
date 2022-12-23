@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EndlessTerrain : MonoBehaviour {
 
-	const float scale = 2.5f;
+	const float scale = 5f;
 
 	const float viewerMoveThresholdForChunkUpdate = 25f;
 	const float sqrViewerMoveThresholdForChunkUpdate = viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;
@@ -119,6 +119,7 @@ public class EndlessTerrain : MonoBehaviour {
 			Vector3 positionV3 = new Vector3(position.x,0,position.y);
 
 			meshObject = new GameObject("Terrain Chunk");
+			meshObject.layer = 10; 
 			meshRenderer = meshObject.AddComponent<MeshRenderer>();
 			meshFilter = meshObject.AddComponent<MeshFilter>();
 			meshCollider = meshObject.AddComponent<MeshCollider>();
@@ -126,7 +127,7 @@ public class EndlessTerrain : MonoBehaviour {
 
 			meshObject.transform.position = positionV3 * scale;
 			meshObject.transform.parent = parent;
-			meshObject.transform.localScale = Vector3.one * scale;
+			meshObject.transform.localScale = new Vector3(1f,0.5f,1f) * scale;
 			SetVisible(false);
 
 			lodMeshes = new LODMesh[detailLevels.Length];

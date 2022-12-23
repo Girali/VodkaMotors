@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class VehiculMotor : Motor
 {
-    [SerializeField]
-    private WheelCollider[] frontWheels;
-    [SerializeField]
-    private WheelCollider[] rearWheels;
+    public WheelCollider[] frontWheels;
+    public WheelCollider[] rearWheels;
 
     [SerializeField]
     private MusicController musicController;
+    private VehiculPartController vehiculPartController;
 
     private WheelFrictionCurve[] rearWheelFrictionCurves;
 
@@ -39,6 +38,12 @@ public class VehiculMotor : Motor
     [SerializeField]
     private float powerAutoCorrect = 20;
 
+    [SerializeField]
+    private float powerRedirect = 1;
+    [SerializeField]
+    private float powerSubVelocity = 1;
+
+
     public void EnterVehicul()
     {
         inUse = true;
@@ -57,9 +62,9 @@ public class VehiculMotor : Motor
         rearWheels[1].brakeTorque = breakForce;
     }
 
-    protected override void Start()
+    public void Init()
     {
-        base.Start();
+        vehiculPartController = GetComponent<VehiculPartController>();
         rearWheelFrictionCurves = new WheelFrictionCurve[2];
         rearWheelFrictionCurves[0] = rearWheels[0].sidewaysFriction;
         rearWheelFrictionCurves[1] = rearWheels[1].sidewaysFriction;
@@ -68,6 +73,34 @@ public class VehiculMotor : Motor
         frontWheels[1].brakeTorque = breakForce;
         rearWheels[0].brakeTorque = breakForce;
         rearWheels[1].brakeTorque = breakForce;
+    }
+
+    public void CheckDrift()
+    {
+        Vector3 v1 = rb.velocity;
+        Vector3 v2 = transform.forward;
+
+        v1.y = 0;
+        v2.y = 0;
+
+        v1.Normalize();
+        v2.Normalize();
+
+        float d = Vector3.Dot(v1.normalized, v2.normalized);
+
+        if(d < 0.8f)
+        {
+            rb.AddForce(-v1 * powerSubVelocity, ForceMode.Acceleration);
+            rb.AddForce(v2 * powerRedirect, ForceMode.Acceleration);
+        }
+    }
+
+    public float Speed
+    {
+        get
+        {
+            return rb.velocity.magnitude;
+        }
     }
 
     public void Update()
@@ -89,6 +122,15 @@ public class VehiculMotor : Motor
 
 
         float upTilt = transform.eulerAngles.z;
+        float frontTilt = transform.eulerAngles.x;
+
+        if (frontTilt > 180)
+            frontTilt -= 360;
+
+        if (Mathf.Abs(frontTilt) > thresholdAutoCorrect)
+        {
+            rb.AddRelativeTorque(Vector3.right * frontTilt * powerAutoCorrect, ForceMode.Force);
+        }
 
         if (upTilt > 180)
             upTilt -= 360;
@@ -99,6 +141,8 @@ public class VehiculMotor : Motor
         }
     }
 
+
+
     public override void Move(bool forward, bool backward, bool left, bool right, bool jump, bool sprint, float yaw, float pitch, RaycastHit hit, bool interact)
     {
         base.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit, interact);
@@ -108,12 +152,20 @@ public class VehiculMotor : Motor
             t2 = forward ? maxSpeedTarget : -maxSpeedTarget;
 
         currentSpeed = Mathf.Lerp(currentSpeed, t2, lerpSpeedSpeed);
-
+        
         float t1 = 0;
         if (left ^ right)
             t1 = left ? -maxStearAngle : maxStearAngle;
 
+        vehiculPartController.UpdateView(((currentStearAngle / maxStearAngle) + 1f) / 2f);
+
         currentStearAngle = Mathf.Lerp(currentStearAngle, t1, lerpStearSpeed);
+
+        if(forward)
+            CheckDrift();
+
+        if (shiftDown)
+            musicController.StartNewMusic();
 
         if (!(forward || backward || left || right))
         {

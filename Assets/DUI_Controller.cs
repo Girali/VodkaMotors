@@ -23,7 +23,7 @@ public class DUI_Controller : MonoBehaviour
     [SerializeField]
     private GameObject pointInterestItem;
 
-    public DUI_InterestPoint AddItemPoint( GameObject ip)
+    public DUI_InterestPoint AddItemPoint(GameObject ip)
     {
         DUI_InterestPoint g = Instantiate(pointInterestItem, ip.transform.position, Quaternion.identity, transform).GetComponent<DUI_InterestPoint>();
         g.gameObject.SetActive(true);
@@ -31,7 +31,7 @@ public class DUI_Controller : MonoBehaviour
         return g;
     }
 
-    public DUI_InterestPoint AddQuestPoint( GameObject ip)
+    public DUI_InterestPoint AddQuestPoint(GameObject ip)
     {
         DUI_InterestPoint g = Instantiate(pointInterestQuest, ip.transform.position, Quaternion.identity , transform).GetComponent<DUI_InterestPoint>();
         g.gameObject.SetActive(true);

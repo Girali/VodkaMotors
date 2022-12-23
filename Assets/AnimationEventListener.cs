@@ -12,7 +12,10 @@ public class AnimationEventListener : MonoBehaviour
 
     public void AnimEnd()
     {
-        if(listen)
+        if (listen)
+        {
             playerMotor.StartUse();
+            playerMotor.GetComponent<PlayerFootController>().StartUse();
+        }
     }
 }

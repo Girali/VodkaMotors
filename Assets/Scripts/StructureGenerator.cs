@@ -8,6 +8,8 @@ public class StructureGenerator : MonoBehaviour
     public bool autoUpdate = false;
     public bool preview = false;
 
+    public float scale = 2f;
+
     public int mapSize = 350;
     public int seed = 0;
 
@@ -64,7 +66,7 @@ public class StructureGenerator : MonoBehaviour
                 if (result[i].structureType == structres[j].structureType)
                 {
                     RaycastHit hit;
-                    Physics.Raycast(new Vector3(result[i].position.x, 30, result[i].position.y), Vector3.down, out hit, 40);
+                    Physics.Raycast(new Vector3(result[i].position.x * scale, 30, result[i].position.y * scale), Vector3.down, out hit, 40);
 
                     if (waterLevel < hit.point.y)
                     {
@@ -73,7 +75,7 @@ public class StructureGenerator : MonoBehaviour
 
                         g.Init();
 
-                        g.transform.position = new Vector3(result[i].position.x, hit.point.y, result[i].position.y);
+                        g.transform.position = new Vector3(result[i].position.x * scale, hit.point.y, result[i].position.y * scale);
                         Vector3 frwd = hit.normal;
                         frwd.y = 0;
 

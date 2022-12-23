@@ -29,15 +29,34 @@ public class PlayerInteractController : MonoBehaviour
         {
             if (hit.collider)
             {
-                InteractableObject io = hit.collider.GetComponent<InteractableObject>();
-                if (io != null)
+                if (hit.rigidbody)
                 {
-                    io.StartInteract();
-                    hand.transform.position = hit.point;
-                    hand.connectedBody = io.rb;
-                    hand.transform.parent = null;
-                    interactableObject = io;
-                    lineRenderer.enabled = true;
+                    InteractableObject io = hit.rigidbody.GetComponent<InteractableObject>();
+                    if (io != null)
+                    {
+                        io.StartInteract();
+                        hand.transform.position = hit.point;
+                        hand.connectedBody = io.rb;
+                        hand.transform.parent = null;
+                        interactableObject = io;
+                        lineRenderer.enabled = true;
+                    }
+                    else
+                    {
+                        Interactable i = hit.collider.GetComponent<Interactable>();
+                        if (i != null)
+                        {
+                            io.StartInteract();
+                        }
+                    }
+                }
+                else
+                {
+                    Interactable io = hit.collider.GetComponent<Interactable>();
+                    if (io != null)
+                    {
+                        io.StartInteract();
+                    }
                 }
             }
         }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameController : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class GameController : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject player;
     public GameObject vehicul;
+    public GameObject startItem;
     public GameObject[] prefabsMission;
 
     public SpawnPoints spawnPoints;
@@ -32,9 +34,11 @@ public class GameController : MonoBehaviour
 
     private float spawnRadius = 100f;
 
+    public UnityEvent onMissionComplete;
+
     public void CompleteMission()
     {
-
+        onMissionComplete.Invoke();
     }
 
     public void StartNewMission()
@@ -54,9 +58,10 @@ public class GameController : MonoBehaviour
         m.Sort(new MissionDistCompare());
         endPoint = m[0];
         endPoint.StartMission();
-        SpawnMissionObject(player.transform);
 
+        TutorialManager.Instance.missiongFirst = endPoint.gameObject;
         GUI_Controller.Instance.compass.InitMission(player, endPoint);
+        startItem.GetComponent<CrateContentManager>().AddIndicator();
     }
 
     class MissionDistCompare : IComparer<MissionStructure>
@@ -160,7 +165,5 @@ public class GameController : MonoBehaviour
         player = Instantiate(playerPrefab, spawnPoints.playerSpawnPoint.transform.position, spawnPoints.playerSpawnPoint.transform.rotation);
 
         StartCoroutine(SpawnPointFinder());
-
-        StartFirstMission();
     }
 }

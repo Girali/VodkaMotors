@@ -18,9 +18,17 @@ public class WheelViewManger : MonoBehaviour
 
     private void Update()
     {
-        wheel.GetWorldPose(out v, out q);
+        if(wheel.enabled)
+        {
+            wheel.GetWorldPose(out v, out q);
 
-        render.transform.position = v;
-        render.transform.rotation = q;
+            render.transform.position = v;
+            render.transform.rotation = q;
+        }
+        else
+        {
+            render.transform.localPosition = Vector3.zero;
+            render.transform.localRotation = Quaternion.identity;
+        }
     }
 }

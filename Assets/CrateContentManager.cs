@@ -29,6 +29,10 @@ public class CrateContentManager : MonoBehaviour
     {
         interactableObject = GetComponent<InteractableObject>();
         GUI_Controller.Instance.compass.InitMission(this);
+    }
+
+    public void AddIndicator()
+    {
         interestPoint = DUI_Controller.Instance.AddItemPoint(gameObject);
         interactableObject.onInteractStart += interestPoint.DestoryNow;
     }

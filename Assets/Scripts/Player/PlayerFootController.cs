@@ -30,6 +30,8 @@ public class PlayerFootController : MonoBehaviour
     private bool mouse2Up;
     private bool vodka;
     private int interactLayer;
+    private float yawStart;
+    private bool inUse = false;
 
     public void SetNewMotor(VehiculMotor m)
     {
@@ -45,12 +47,28 @@ public class PlayerFootController : MonoBehaviour
         vehiculMotor = m;
     }
 
+    public void StopUse()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        inUse = false;
+    }
+
+    public void StartUse()
+    {
+        yaw = yawStart;
+        pitch = 0;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        inUse = true;
+    }
+
     private void Start()
     {
         Time.fixedDeltaTime = 1f / 60f;
         Application.targetFrameRate = 60;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+
+        yawStart = transform.eulerAngles.y;
 
         interactLayer = LayerMask.GetMask("Interactable");
         playerInteractController = GetComponent<PlayerInteractController>();
@@ -67,28 +85,52 @@ public class PlayerFootController : MonoBehaviour
 
     private void PoolKeys()
     {
-        xMouse = Input.GetAxisRaw("Mouse X");
-        yMouse = Input.GetAxisRaw("Mouse Y");
+        if (inUse)
+        {
+            xMouse = Input.GetAxisRaw("Mouse X");
+            yMouse = Input.GetAxisRaw("Mouse Y");
 
-        forward = Input.GetKey(KeyCode.W);
-        backward = Input.GetKey(KeyCode.S);
-        left = Input.GetKey(KeyCode.A);
-        right = Input.GetKey(KeyCode.D);
-        vodka = Input.GetKeyDown(KeyCode.V);
-        interact = Input.GetKeyDown(KeyCode.E);
-        jump = Input.GetKey(KeyCode.Space);
-        sprint = Input.GetKey(KeyCode.LeftShift);
+            forward = Input.GetKey(KeyCode.W);
+            backward = Input.GetKey(KeyCode.S);
+            left = Input.GetKey(KeyCode.A);
+            right = Input.GetKey(KeyCode.D);
+            vodka = Input.GetKeyDown(KeyCode.V);
+            interact = Input.GetKeyDown(KeyCode.E);
+            jump = Input.GetKey(KeyCode.Space);
+            sprint = Input.GetKey(KeyCode.LeftShift);
 
-        mouse1Down = Input.GetMouseButtonDown(0);
-        mouse2Down = Input.GetMouseButtonDown(1);
-        mouse1 = Input.GetMouseButton(0);
-        mouse2 = Input.GetMouseButton(1);
-        mouse1Up = Input.GetMouseButtonUp(0);
-        mouse2Up = Input.GetMouseButtonUp(1);
+            mouse1Down = Input.GetMouseButtonDown(0);
+            mouse2Down = Input.GetMouseButtonDown(1);
+            mouse1 = Input.GetMouseButton(0);
+            mouse2 = Input.GetMouseButton(1);
+            mouse1Up = Input.GetMouseButtonUp(0);
+            mouse2Up = Input.GetMouseButtonUp(1);
 
-        yaw += xMouse * sensitivity;
-        yaw = AngleModulo(yaw);
-        pitch += -yMouse * sensitivity;
+            yaw += xMouse * sensitivity;
+            yaw = AngleModulo(yaw);
+            pitch += -yMouse * sensitivity;
+        }
+        else
+        {
+            xMouse = 0;
+            yMouse = 0;
+
+            forward = false;
+            backward = false;
+            left = false;
+            right = false;
+            vodka = false;
+            interact = false;
+            jump = false;
+            sprint = false;
+
+            mouse1Down = false;
+            mouse2Down = false;
+            mouse1 = false;
+            mouse2 = false;
+            mouse1Up = false;
+            mouse2Up = false;
+        }
     }
 
     private void Update()

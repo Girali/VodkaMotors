@@ -18,9 +18,11 @@ public class DUI_InterestPoint : MonoBehaviour
         interestPoint = ip;
     }
 
-    public void DestoryNow(InteractableObject io)
+    public void DestoryNow(Interactable io)
     {
-        io.onInteractStart -= DestoryNow;
+        if(io)
+            io.onInteractStart -= DestoryNow;
+
         Destroy(gameObject);
     }
 

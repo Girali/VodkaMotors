@@ -23,6 +23,15 @@ public class GUI_Controller : MonoBehaviour
 
     public UI_Compass compass;
     public UI_Vodka vodka;
+    public UI_PartsPanel partsPanel;
+
+    public void AddNotify(VehiculPartObject vpo)
+    {
+        GameObject g = Instantiate(addNotify, gui.transform);
+        g.GetComponent<UI_NotifyAdd>().Init(vpo);
+    }
+
+    public GameObject addNotify;
 
     public Jun_TweenRuntime fadeIn;
     public Jun_TweenRuntime fadeOut;
