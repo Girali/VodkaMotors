@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
-public class PlayerVodkaController : MonoBehaviour
+public class PlayerItemController : MonoBehaviour
 {
     [SerializeField]
     private float regenRate = 0.2f;
@@ -19,9 +18,9 @@ public class PlayerVodkaController : MonoBehaviour
     private float drinkingTime = 3f;
 
     private float currentState = 2f;
-    [SerializeField] 
+    [SerializeField]
     private Volume volume;
-    [SerializeField] 
+    [SerializeField]
     private RotationConstraint constraint;
     private bool drinking = false;
     private float stopDrinkTimer = 0;
@@ -33,11 +32,17 @@ public class PlayerVodkaController : MonoBehaviour
         playerAnimation = GetComponent<PlayerAnimation>();
     }
 
-    public void Motor(bool interact)
+    public enum ItemType
     {
-        if(!drinking)
+        Vodka,
+        Shotgun
+    }
+
+    public void Motor(bool vodka, bool leftClick, bool reload)
+    {
+        if (!drinking)
         {
-            if(interact && drinkAmount > drink) 
+            if (vodka && drinkAmount > drink)
             {
                 stopDrinkTimer = Time.time + drinkingTime;
                 drinking = true;
@@ -53,14 +58,14 @@ public class PlayerVodkaController : MonoBehaviour
             if (drinkAmount > 1)
                 drinkAmount = 1;
 
-            if(alcoolAmountTarget < 0)
+            if (alcoolAmountTarget < 0)
                 alcoolAmountTarget = 0;
 
             GUI_Controller.Instance.vodka.UpdateView(drinkAmount);
         }
         else
         {
-            if(stopDrinkTimer < Time.time)
+            if (stopDrinkTimer < Time.time)
             {
                 drinking = false;
             }

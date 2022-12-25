@@ -17,6 +17,9 @@ public class InteractablePart : InteractableObject
 
     public virtual void StartInteraction()
     {
+        collectablePart =true;
+        rb = GetComponent<Rigidbody>();
+
         if (rb == null)
         {
             rb = gameObject.AddComponent<Rigidbody>();
@@ -29,6 +32,10 @@ public class InteractablePart : InteractableObject
                     c.enabled = true;
                 }
             }
+        }
+        else
+        {
+            rb.isKinematic = false;
         }
     }
 

@@ -9,6 +9,9 @@ public class UI_Compass : MonoBehaviour
     [SerializeField]
     private GameObject mission;
 
+    [SerializeField]
+    private GameObject gui;
+
     private GameObject player;
     private MissionStructure missionStructure;
     private CrateContentManager crateContentManager;
@@ -24,6 +27,11 @@ public class UI_Compass : MonoBehaviour
         crateContentManager = ccm;
     }
 
+    public void StopMission()
+    {
+        missionStructure = null;
+    }
+
     public void InitMission(GameObject p, MissionStructure ms)
     {
         missionStructure = ms;
@@ -32,6 +40,17 @@ public class UI_Compass : MonoBehaviour
 
     public void Update()
     {
+        if(missionStructure == null)
+        {
+            if(gui.activeSelf)
+                gui.SetActive(false);
+        }
+        else
+        {
+            if (!gui.activeSelf)
+                gui.SetActive(true);
+        }
+
         if (crateContentManager != null && player != null)
         {
             Vector3 dir = (crateContentManager.transform.position - player.transform.position);

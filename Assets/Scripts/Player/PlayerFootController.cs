@@ -9,7 +9,7 @@ public class PlayerFootController : MonoBehaviour
     private VehiculMotor vehiculMotor;
     private PlayerMotor playerMotor;
     private PlayerInteractController playerInteractController;
-    private PlayerVodkaController playerVodkaController;
+    private PlayerItemController playerItemController;
     public float sensitivity;
     private bool forward;
     private bool backward;
@@ -22,6 +22,7 @@ public class PlayerFootController : MonoBehaviour
     private float xMouse;
     private float yMouse;
     private bool interact;
+    private bool reload;
     private bool mouse1Down;
     private bool mouse2Down;
     private bool mouse1;
@@ -73,7 +74,7 @@ public class PlayerFootController : MonoBehaviour
         interactLayer = LayerMask.GetMask("Interactable");
         playerInteractController = GetComponent<PlayerInteractController>();
         playerMotor = GetComponent<PlayerMotor>();
-        playerVodkaController = GetComponent<PlayerVodkaController>();
+        playerItemController = GetComponent<PlayerItemController>();
     }
 
     private float AngleModulo(float value)
@@ -90,14 +91,15 @@ public class PlayerFootController : MonoBehaviour
             xMouse = Input.GetAxisRaw("Mouse X");
             yMouse = Input.GetAxisRaw("Mouse Y");
 
-            forward = Input.GetKey(KeyCode.W);
-            backward = Input.GetKey(KeyCode.S);
-            left = Input.GetKey(KeyCode.A);
-            right = Input.GetKey(KeyCode.D);
+            forward = Input.GetKey(AppController.Instance.forward);
+            backward = Input.GetKey(AppController.Instance.backward);
+            left = Input.GetKey(AppController.Instance.left);
+            right = Input.GetKey(AppController.Instance.right);
             vodka = Input.GetKeyDown(KeyCode.V);
-            interact = Input.GetKeyDown(KeyCode.E);
-            jump = Input.GetKey(KeyCode.Space);
-            sprint = Input.GetKey(KeyCode.LeftShift);
+            reload = Input.GetKeyDown(KeyCode.R);
+            interact = Input.GetKeyDown(AppController.Instance.interact);
+            jump = Input.GetKey(AppController.Instance.jump);
+            sprint = Input.GetKey(AppController.Instance.sprint);
 
             mouse1Down = Input.GetMouseButtonDown(0);
             mouse2Down = Input.GetMouseButtonDown(1);
@@ -143,7 +145,7 @@ public class PlayerFootController : MonoBehaviour
         playerMotor.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit, interact);
 
         playerInteractController.Motor(mouse1Down, mouse1Up, hit);
-        playerVodkaController.Motor(vodka);
+        playerItemController.Motor(vodka, mouse1Down, reload);
 
 
         if (vehiculMotor != null)

@@ -25,6 +25,7 @@ public class DialogueController : MonoBehaviour
     private IEnumerator DiaolgueTime()
     {
         musicController.PlayDiaolgue(currentSequence.clip);
+        GUI_Controller.Instance.AddDialogue(currentSequence);
         foreach (var s in systems)
         {
             s.Play(true);

@@ -38,6 +38,7 @@ public class GameController : MonoBehaviour
 
     public void CompleteMission()
     {
+        GUI_Controller.Instance.compass.StopMission();
         onMissionComplete.Invoke();
     }
 

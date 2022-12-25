@@ -35,6 +35,16 @@ public class PlayerAnimation : MonoBehaviour
         sahdowAnim.SetTrigger("Waking");
     }
 
+    public void Aim(float p)
+    {
+        Debug.LogError(p);
+        p = 1 - ((p + 90) / 180f);
+        Debug.LogError(p);
+        modelAnim.SetFloat("Pitch", p);
+        sahdowAnim.SetFloat("Pitch", p);
+    }
+
+
     public void Run(Vector2 v)
     {
         currentRunValue = Vector2.Lerp(currentRunValue, v, lerpTime);

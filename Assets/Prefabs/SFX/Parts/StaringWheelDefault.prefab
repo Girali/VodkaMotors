@@ -237,10 +237,10 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 3
 --- !u!114 &9033399636161377783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,11 +253,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ca19087658da7f4586c87af17506669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+  text: Left click to grab
   rb: {fileID: 0}
   vehiculPartObject: {fileID: 11400000, guid: b2f10773dee9e9c4f94cf26e25f9dac1, type: 2}
   disableCollidersOnStop: 1
   collisionColliders:
   - {fileID: 4503603878516138883}
+  collectablePart: 0
   render: {fileID: 4737149329153305389}
   angleMax: 45
 --- !u!1001 &4732534448009655531

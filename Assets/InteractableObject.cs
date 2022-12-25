@@ -5,7 +5,6 @@ using UnityEngine.Events;
 
 public class InteractableObject : Interactable
 {
-    [HideInInspector]
     public Rigidbody rb;
 
     private void Awake()

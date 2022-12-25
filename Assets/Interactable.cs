@@ -15,6 +15,8 @@ public class Interactable : MonoBehaviour
 
     public UnityEvent onInteract;
 
+    public string text;
+
     public void StartInteract()
     {
         if (onInteractStart != null)

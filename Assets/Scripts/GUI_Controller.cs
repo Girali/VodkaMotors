@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -25,13 +26,29 @@ public class GUI_Controller : MonoBehaviour
     public UI_Vodka vodka;
     public UI_PartsPanel partsPanel;
 
+    [SerializeField]
+    private TMP_Text interactText;
+
+    public GameObject addNotify;
+    public GameObject addDialogue;
+
+    public void SetInteractText(string s)
+    {
+        interactText.text = s;
+    }
+
     public void AddNotify(VehiculPartObject vpo)
     {
         GameObject g = Instantiate(addNotify, gui.transform);
         g.GetComponent<UI_NotifyAdd>().Init(vpo);
     }
 
-    public GameObject addNotify;
+    public void AddDialogue(DialogueController.Sequence s)
+    {
+        GameObject g = Instantiate(addDialogue, gui.transform);
+        g.GetComponent<UI_DiaolgueNotify>().InitText(s.text);
+    }
+
 
     public Jun_TweenRuntime fadeIn;
     public Jun_TweenRuntime fadeOut;

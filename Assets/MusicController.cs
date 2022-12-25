@@ -79,6 +79,12 @@ public class MusicController : MonoBehaviour
 
         playBeat = false;
 
+        foreach (ParticleSystem s in systems)
+        {
+            s.Clear(true);
+            s.Stop(true);
+        }
+
         float startVolume = audioSourceMusic.volume;
 
         for (int i = 0; i < 60; i++)

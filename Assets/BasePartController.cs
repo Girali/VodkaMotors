@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using static UnityEngine.Rendering.DebugUI;
@@ -21,6 +22,28 @@ public class BasePartController : MonoBehaviour
     public bool IsCurrentPartEmpty()
     {
         return vehiculPartController.GetPart(currentPart, variantIndex) == null;
+    }
+
+    public void AddObject(VehiculPartObject ip)
+    {
+        if (ip != null)
+        {
+            if (ip.prefab != null)
+            {
+                partStored.Add(ip);
+            }
+        }
+    }
+
+    public void RemoveObject(VehiculPartObject ip)
+    {
+        if (ip != null) 
+        { 
+            if (ip.prefab != null)
+            {
+                partStored.Remove(ip);
+            }
+        }
     }
 
     public void NextIndex()
@@ -102,11 +125,13 @@ public class BasePartController : MonoBehaviour
 
     public void Enter()
     {
+        partStored = partStored.OrderBy((t) => t.part).ToList();
         cam.gameObject.SetActive(true);
         vehiculPartController.transform.position = vehiculTarget.position;
         vehiculPartController.transform.rotation = vehiculTarget.rotation;
         vehiculPartController.GetComponent<Rigidbody>().isKinematic = true;
         GUI_Controller.Instance.partsPanel.gameObject.SetActive(true);
+        GUI_Controller.Instance.gui.gameObject.SetActive(false);
         FindObjectOfType<PlayerFootController>().StopUse();
     }
 
@@ -116,6 +141,7 @@ public class BasePartController : MonoBehaviour
         target = null;
         vehiculPartController.GetComponent<Rigidbody>().isKinematic = false;
         GUI_Controller.Instance.partsPanel.gameObject.SetActive(false);
+        GUI_Controller.Instance.gui.gameObject.SetActive(true);
         FindObjectOfType<PlayerFootController>().StartUse();
     }
 

@@ -109,6 +109,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a37d678e0664e54f93af02d0bef5ebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+  text: 
   rb: {fileID: 0}
 --- !u!54 &3979581187998873239
 Rigidbody:
@@ -274,6 +278,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a37d678e0664e54f93af02d0bef5ebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+  text: Left click to grab
   rb: {fileID: 0}
 --- !u!114 &512361297339868779
 MonoBehaviour:

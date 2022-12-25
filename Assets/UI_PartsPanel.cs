@@ -19,7 +19,10 @@ public class UI_PartsPanel : MonoBehaviour
 
     public VehiculPartObject OnClick(VehiculPartObject vpo)
     {
-        return basePartController.ReplacePiece(vpo);
+        VehiculPartObject p = basePartController.ReplacePiece(vpo);
+        basePartController.RemoveObject(vpo);
+        basePartController.AddObject(p);
+        return p;
     }
 
     public void EmptySection()
@@ -35,7 +38,7 @@ public class UI_PartsPanel : MonoBehaviour
 
         foreach (GameObject child in allChildren)
         {
-            Destroy(child.gameObject);
+            DestroyImmediate(child.gameObject);
         }
     }
 
@@ -157,10 +160,14 @@ public class UI_PartsPanel : MonoBehaviour
         currentSection = s;
     }
 
-    public void OnEnable()
+    public void OnDisable()
     {
         EmptySection();
+        partSeparators = new List<UI_PartSeparator>();
+    }
 
+    public void OnEnable()
+    {
         foreach (VehiculPartObject vpo in basePartController.partStored)
         {
             AddPart(vpo);

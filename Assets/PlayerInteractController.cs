@@ -23,8 +23,48 @@ public class PlayerInteractController : MonoBehaviour
     [SerializeField]
     private float powerReleaseForce = -10;
 
+    private Interactable lastInteractable;
+
     public void Motor(bool mouseLeftDown, bool mouseLeftUp, RaycastHit hit)
     {
+        if (hit.collider)
+        {
+            Interactable i = hit.collider.GetComponent<Interactable>();
+
+            if (hit.rigidbody)
+            {
+                InteractableObject io = hit.rigidbody.GetComponent<InteractableObject>();
+
+                if(io != lastInteractable)
+                {
+                    lastInteractable = io;
+                    GUI_Controller.Instance.SetInteractText(lastInteractable.text);
+                }
+            }
+            else if(i != null)
+            {
+                if (i != lastInteractable)
+                {
+                    lastInteractable = i;
+                    GUI_Controller.Instance.SetInteractText(lastInteractable.text);
+                }
+            }
+            else if(lastInteractable)
+            {
+                lastInteractable = null;
+                GUI_Controller.Instance.SetInteractText("");
+            }
+        }
+        else
+        {
+            if(lastInteractable != null)
+            {
+                lastInteractable = null;
+            }
+
+            GUI_Controller.Instance.SetInteractText("");
+        }
+
         if (mouseLeftDown)
         {
             if (hit.collider)

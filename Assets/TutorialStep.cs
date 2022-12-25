@@ -10,11 +10,9 @@ public class TutorialStep : MonoBehaviour
 
     public virtual void Begin()
     {
-        Debug.LogError(name);
     }
 
     public virtual void End()
     {
-        Debug.LogWarning(name);
     }
 }

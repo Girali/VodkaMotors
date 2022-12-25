@@ -258,6 +258,7 @@ public class PlayerMotor : Motor
 
                 transform.rotation = Quaternion.Euler(0, yaw, 0);
                 cam.transform.localEulerAngles = new Vector3(pitch, 0, 0f);
+                playerAnimation.Aim(pitch);
 
                 if (interact)
                 {
