@@ -88,7 +88,7 @@ public class UI_PartsPanel : MonoBehaviour
                 return true;
             case VehiculParts.Armature:
                 return true;
-            case VehiculParts.StairingWheel:
+            case VehiculParts.SteeringWheel:
                 return false;
             case VehiculParts.Back:
                 return true;

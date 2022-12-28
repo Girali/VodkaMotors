@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d92783b8203fd2446ac490cbe2570ed3, type: 3}
+  m_Name: Wheel Type 7
+  m_EditorClassIdentifier: 
+  part: 2
+  prefab: {fileID: 5565652608200622350, guid: 0743e5ce6a887fc4dbf06c5a223dc28e, type: 3}
+  texture: {fileID: 2800000, guid: 65ac493ab02fbdf47a3d584558986ceb, type: 3}
+  radius: 0.4

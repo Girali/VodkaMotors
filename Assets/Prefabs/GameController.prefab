@@ -45,4 +45,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 8213288670279130560, guid: 8adabe4a934d36c4da553dc728f1ceb1, type: 3}
   player: {fileID: 0}
-  playerSpawnPoint: {fileID: 0}
+  vehicul: {fileID: 0}
+  startItem: {fileID: 0}
+  prefabsMission:
+  - {fileID: 3640539213541461448, guid: f9adccf83011002498a029c6662499bc, type: 3}
+  - {fileID: 497993896664103476, guid: 393319dc5d94df547a72080ff32798db, type: 3}
+  - {fileID: 9087776215938886334, guid: 7a97096cf9607ab47bce99ad9867564c, type: 3}
+  spawnPoints: {fileID: 0}
+  onMissionComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: TutorialStepWaitCallback, Assembly-CSharp
+        m_MethodName: End
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

@@ -5,6 +5,8 @@ using UnityEngine;
 public class MissionStructure : WorldStructre
 {
     private bool missionPoint = false;
+    public AudioSource source;
+    public ParticleSystem system;
 
     public override void Init()
     {
@@ -16,11 +18,6 @@ public class MissionStructure : WorldStructre
     {
         missionPoint = true;
         DUI_Controller.Instance.AddQuestPoint(gameObject);
-    }
-
-    public float DistanceFromPlayer()
-    {
-        return Vector3.Distance(transform.position, GameController.Instance.player.transform.position);
     }
 
     private void OnTriggerEnter(Collider other)

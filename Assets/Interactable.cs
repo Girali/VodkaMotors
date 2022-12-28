@@ -14,24 +14,30 @@ public class Interactable : MonoBehaviour
     public UnityAction<Interactable> onInteractEnd;
 
     public UnityEvent onInteract;
-
+    public bool canInteract = true;
     public string text;
 
     public void StartInteract()
     {
-        if (onInteractStart != null)
+        if (canInteract)
         {
-            onInteractStart(this);
-        }
+            if (onInteractStart != null)
+            {
+                onInteractStart(this);
+            }
 
-        onInteract.Invoke();
+            onInteract.Invoke();
+        }
     }
 
     public void StopInteract()
     {
-        if (onInteractEnd != null)
+        if (canInteract)
         {
-            onInteractEnd(this);
+            if (onInteractEnd != null)
+            {
+                onInteractEnd(this);
+            }
         }
     }
 }

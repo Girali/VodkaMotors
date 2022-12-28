@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour
     public SpawnPoints spawnPoints;
 
     private List<MissionStructure> missionPoints = new List<MissionStructure>();
+    private List<WorldStructre> majorStrcutre = new List<WorldStructre>();
     private MissionStructure startPoint = null;
     private MissionStructure endPoint = null;
 
@@ -44,7 +46,12 @@ public class GameController : MonoBehaviour
 
     public void StartNewMission()
     {
-
+        startPoint = endPoint;
+        endPoint = missionPoints[Random.Range(0, missionPoints.Count)];
+        endPoint.StartMission();
+        GameObject g = Instantiate(prefabsMission[Random.Range(0, prefabsMission.Length)], endPoint.transform.position + endPoint.transform.up, Random.rotation);
+        GUI_Controller.Instance.compass.InitMission(player, endPoint);
+        g.GetComponent<CrateContentManager>().AddIndicator();
     }
 
     public void SpawnMissionObject(Transform t)
@@ -65,9 +72,24 @@ public class GameController : MonoBehaviour
         startItem.GetComponent<CrateContentManager>().AddIndicator();
     }
 
+    public WorldStructre GetNearMajorStruct()
+    {
+        List<WorldStructre> m = new List<WorldStructre>(majorStrcutre);
+        m.Sort(new MajorDistCompare());
+        return m[0];
+    }
+
     class MissionDistCompare : IComparer<MissionStructure>
     {
         public int Compare(MissionStructure e1, MissionStructure e2)
+        {
+            return e1.DistanceFromPlayer().CompareTo(e2.DistanceFromPlayer());
+        }
+    }
+
+    class MajorDistCompare : IComparer<WorldStructre>
+    {
+        public int Compare(WorldStructre e1, WorldStructre e2)
         {
             return e1.DistanceFromPlayer().CompareTo(e2.DistanceFromPlayer());
         }
@@ -81,6 +103,11 @@ public class GameController : MonoBehaviour
     public void AddMissionPoint(MissionStructure missionStructure)
     {
         missionPoints.Add(missionStructure);
+    }
+
+    public void AddMajorStruct(WorldStructre worldStructre)
+    {
+        majorStrcutre.Add(worldStructre);
     }
 
     public (bool, Vector3) TestSpawnPosition(Vector3 v, Vector3 d)

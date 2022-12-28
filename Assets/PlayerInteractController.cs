@@ -38,7 +38,7 @@ public class PlayerInteractController : MonoBehaviour
                 if(io != lastInteractable)
                 {
                     lastInteractable = io;
-                    GUI_Controller.Instance.SetInteractText(lastInteractable.text);
+                    GUI_Controller.Instance.SetInteractText(lastInteractable);
                 }
             }
             else if(i != null)
@@ -46,13 +46,13 @@ public class PlayerInteractController : MonoBehaviour
                 if (i != lastInteractable)
                 {
                     lastInteractable = i;
-                    GUI_Controller.Instance.SetInteractText(lastInteractable.text);
+                    GUI_Controller.Instance.SetInteractText(lastInteractable);
                 }
             }
             else if(lastInteractable)
             {
                 lastInteractable = null;
-                GUI_Controller.Instance.SetInteractText("");
+                GUI_Controller.Instance.SetInteractText(lastInteractable);
             }
         }
         else
@@ -62,7 +62,7 @@ public class PlayerInteractController : MonoBehaviour
                 lastInteractable = null;
             }
 
-            GUI_Controller.Instance.SetInteractText("");
+            GUI_Controller.Instance.SetInteractText(lastInteractable);
         }
 
         if (mouseLeftDown)

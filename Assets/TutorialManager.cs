@@ -25,8 +25,9 @@ public class TutorialManager : MonoBehaviour
 
     public GameObject prefabPart;
     public GameObject missiongFirst;
-    public GameObject radio;
     public GameObject grageInteract;
+    public Interactable shotgun;
+    public AudioSource radio;
 
     private DUI_InterestPoint interestPoint;
 
@@ -37,15 +38,42 @@ public class TutorialManager : MonoBehaviour
         g.GetComponent<InteractablePart>().StartInteraction();
 
         interestPoint = DUI_Controller.Instance.AddItemPoint(GameController.Instance.spawnPoints.gameObject);
-        radio.transform.position = missiongFirst.transform.position + (Vector3.up * 3f);
+
+        MusicController.Instance.audioSourceDialogue = missiongFirst.GetComponent<MissionStructure>().source;
+        missiongFirst.GetComponent<MissionStructure>().system.Play();
+
         DUI_InterestPoint ip = DUI_Controller.Instance.AddItemPoint(g);
         g.GetComponent<InteractablePart>().onInteractStart += ip.DestoryNow;
     }
 
     public void UseGarage()
     {
-        radio.transform.position = grageInteract.transform.position + (Vector3.up * 2f);
+        MusicController.Instance.audioSourceDialogue = radio;
         interestPoint = DUI_Controller.Instance.AddItemPoint(grageInteract);
+    }
+
+    public void AddShotgun()
+    {
+        GameController.Instance.player.GetComponent<PlayerItemController>().AddShotgun();
+    }
+
+    public void Shotgun()
+    {
+        DUI_InterestPoint ip = DUI_Controller.Instance.AddItemPoint(shotgun.gameObject);
+        shotgun.onInteractStart += ip.DestoryNow;
+        shotgun.canInteract = true;
+
+        EnnemySpawner es = GameController.Instance.GetNearMajorStruct().GetComponent<EnnemySpawner>();
+        es.during = false;
+        es.spawned = false;
+        es.ennemiesToSpawn = new Vector2Int(2, 2);
+        es.spawns = new List<GameObject>();
+        es.allDead += steps[5].End;
+    }
+
+    public void NewDelivery()
+    {
+
     }
 
     private void Start()

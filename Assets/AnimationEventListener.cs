@@ -9,6 +9,16 @@ public class AnimationEventListener : MonoBehaviour
 
     [SerializeField]
     private PlayerMotor playerMotor;
+    [SerializeField]
+    private PlayerAudioController playerAudioController;
+
+    public void FootStep()
+    {
+        if (listen) 
+        {
+            playerAudioController.FootStep();
+        }
+    }
 
     public void AnimEnd()
     {

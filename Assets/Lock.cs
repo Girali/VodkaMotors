@@ -9,6 +9,7 @@ public class Lock : MonoBehaviour
 
     public void Shoot()
     {
+        gameObject.SetActive(false);
         onShoot.Invoke();
     }
 }

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2deb9967de2d744eace34503495b067, type: 3}
+  m_Name: Seat Type 1
+  m_EditorClassIdentifier: 
+  part: 3
+  prefab: {fileID: 1566948362258196206, guid: 27379b2f95efa7f479495a7b5600225a, type: 3}
+  texture: {fileID: 2800000, guid: 425d867b6dc1ea54ba56c50b3ecc4946, type: 3}

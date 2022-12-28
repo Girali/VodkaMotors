@@ -30271,6 +30271,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef7b33c669a1184295d87796bdbed0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onInteract:
+    m_PersistentCalls:
+      m_Calls: []
+  text: Press "E"to enter car
   sitPosition: {fileID: 7447716222537659965}
   motor: {fileID: 7447716221279285869}
 --- !u!1 &7447716222760457670
@@ -30862,6 +30866,10 @@ PrefabInstance:
     - target: {fileID: 173208335996408988, guid: 75ac9ba1ee676b24ab16bae7a2d4607c, type: 3}
       propertyPath: m_Volume
       value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 173208335996408988, guid: 75ac9ba1ee676b24ab16bae7a2d4607c, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6833074610768915576, guid: 75ac9ba1ee676b24ab16bae7a2d4607c, type: 3}
       propertyPath: m_RootOrder

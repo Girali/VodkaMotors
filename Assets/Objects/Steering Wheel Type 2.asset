@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e86765fd02b31b478233fabb435d65e, type: 3}
+  m_Name: Steering Wheel Type 2
+  m_EditorClassIdentifier: 
+  part: 6
+  prefab: {fileID: 5552773843983475508, guid: 91ef775bdcec01545b668fa9eb7876c5, type: 3}
+  texture: {fileID: 2800000, guid: 8e1dd7124a52e2b4fbfa60c55c257400, type: 3}

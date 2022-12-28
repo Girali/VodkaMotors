@@ -29,6 +29,8 @@ public class StructureGenerator : MonoBehaviour
     public Transform parentStruct;
     public Structure[] structres;
 
+    private int layerMask;
+
     public void DrawMapInEditor()
     {
         GenerateStrucutreMap(null);
@@ -36,6 +38,7 @@ public class StructureGenerator : MonoBehaviour
 
     public void GenerateStrucutreMap(EndlessTerrain et)
     {
+        layerMask = LayerMask.GetMask("Floor");
         if (parentStruct)
             DestroyImmediate(parentStruct);
 
@@ -66,7 +69,7 @@ public class StructureGenerator : MonoBehaviour
                 if (result[i].structureType == structres[j].structureType)
                 {
                     RaycastHit hit;
-                    Physics.Raycast(new Vector3(result[i].position.x * scale, 30, result[i].position.y * scale), Vector3.down, out hit, 40);
+                    Physics.Raycast(new Vector3(result[i].position.x * scale, 30, result[i].position.y * scale), Vector3.down, out hit, 40, layerMask);
 
                     if (waterLevel < hit.point.y)
                     {

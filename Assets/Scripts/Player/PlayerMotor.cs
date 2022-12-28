@@ -33,6 +33,13 @@ public class PlayerMotor : Motor
 
     private bool stopInteraction = true;
 
+    private int health = 200;
+    private int healthMax = 200;
+
+
+    [SerializeField]
+    private PlayerAudioController playerAudioController;
+
     [SerializeField]
     private PlayerAnimation playerAnimation;
 
@@ -57,6 +64,20 @@ public class PlayerMotor : Motor
         physicMask = LayerMask.GetMask("Default" , "Floor");
         gravity += frameGravity;
         camInitialPos = render.transform.localPosition;
+    }
+
+    public void AddHealth(int l)
+    {
+        health += l;
+        if (health > healthMax)
+            health = healthMax;
+        GUI_Controller.Instance.health.UpdateView(health / (float)healthMax);
+    }
+
+    public void SubHealth(int l)
+    {
+        health -= l;
+        GUI_Controller.Instance.health.UpdateView(health / (float)healthMax);
     }
 
     public void EnterVehicul(Transform t)
@@ -153,6 +174,7 @@ public class PlayerMotor : Motor
             RaycastHit hit;
             raycast = Physics.Raycast(transform.position, Vector3.down, out hit, 2f, physicMask);
 
+
             Collider[] colliders = Physics.OverlapSphere(transform.position + new Vector3(0, -0.56f, 0), 0.48f, physicMask);
             spherecast = colliders.Length > 1;
 
@@ -162,6 +184,7 @@ public class PlayerMotor : Motor
                 {
                     gravity = 0;
                     grounded = true;
+                    playerAudioController.Landing();
                     playerAnimation.Fall(false);
                 }
             }
@@ -182,6 +205,7 @@ public class PlayerMotor : Motor
 
     public void Jump()
     {
+        playerAudioController.Jump();
         canJump = false;
         jumpPressed = true;
         StartCoroutine(StartJump());

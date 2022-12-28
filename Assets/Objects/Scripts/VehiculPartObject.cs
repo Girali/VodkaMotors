@@ -46,7 +46,7 @@ public enum VehiculParts
     Seat,
     Roof,
     Armature,
-    StairingWheel,
+    SteeringWheel,
     Back,
     Carrige,
     Spoiler,

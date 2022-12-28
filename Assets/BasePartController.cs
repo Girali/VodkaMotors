@@ -94,7 +94,7 @@ public class BasePartController : MonoBehaviour
             case VehiculParts.Seat:
             case VehiculParts.Roof:
             case VehiculParts.Armature:
-            case VehiculParts.StairingWheel:
+            case VehiculParts.SteeringWheel:
             case VehiculParts.Back:
             case VehiculParts.Carrige:
             case VehiculParts.Spoiler:

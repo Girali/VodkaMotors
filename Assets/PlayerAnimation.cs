@@ -35,11 +35,27 @@ public class PlayerAnimation : MonoBehaviour
         sahdowAnim.SetTrigger("Waking");
     }
 
+    public void Stance(int i)
+    {
+        modelAnim.SetInteger("Stance", i);
+        sahdowAnim.SetInteger("Stance", i);
+    }
+
+    public void Fire()
+    {
+        modelAnim.SetTrigger("Fire");
+        sahdowAnim.SetTrigger("Fire");
+    }
+
+    public void Reload()
+    {
+        modelAnim.SetTrigger("Reload");
+        sahdowAnim.SetTrigger("Reload");
+    }
+
     public void Aim(float p)
     {
-        Debug.LogError(p);
         p = 1 - ((p + 90) / 180f);
-        Debug.LogError(p);
         modelAnim.SetFloat("Pitch", p);
         sahdowAnim.SetFloat("Pitch", p);
     }

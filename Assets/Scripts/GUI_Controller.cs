@@ -25,6 +25,9 @@ public class GUI_Controller : MonoBehaviour
     public UI_Compass compass;
     public UI_Vodka vodka;
     public UI_PartsPanel partsPanel;
+    public UI_Ammo ammo;
+    public UI_Health health;
+    public UI_PausePanel pausePanel;
 
     [SerializeField]
     private TMP_Text interactText;
@@ -32,9 +35,16 @@ public class GUI_Controller : MonoBehaviour
     public GameObject addNotify;
     public GameObject addDialogue;
 
-    public void SetInteractText(string s)
+    public void SetInteractText(Interactable s)
     {
-        interactText.text = s;
+        if (s != null)
+        {
+            interactText.text = s.text;
+        }
+        else
+        {
+            interactText.text = "";
+        }
     }
 
     public void AddNotify(VehiculPartObject vpo)

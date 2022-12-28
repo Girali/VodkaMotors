@@ -58,7 +58,7 @@ public class VehiculPartController : MonoBehaviour
                 return roof;
             case VehiculParts.Armature:
                 return armature;
-            case VehiculParts.StairingWheel:
+            case VehiculParts.SteeringWheel:
                 return stairingWheel;
             case VehiculParts.Back:
                 return back;
@@ -131,7 +131,7 @@ public class VehiculPartController : MonoBehaviour
             case VehiculParts.Armature:
                 ip = armature;
                 break;
-            case VehiculParts.StairingWheel:
+            case VehiculParts.SteeringWheel:
                 ip = stairingWheel;
                 break;
             case VehiculParts.Back:
@@ -256,7 +256,7 @@ public class VehiculPartController : MonoBehaviour
                 case VehiculParts.Armature:
                     armature = ip;
                     break;
-                case VehiculParts.StairingWheel:
+                case VehiculParts.SteeringWheel:
                     stairingWheel = ip;
                     break;
                 case VehiculParts.Back:

@@ -5,6 +5,20 @@ using UnityEngine;
 
 public class MusicController : MonoBehaviour
 {
+    private static MusicController _instance;
+    public static MusicController Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<MusicController>();
+            }
+
+            return _instance;
+        }
+    }
+
     public int startClip;
     public AudioClip[] clips;
     public float[] bpm;

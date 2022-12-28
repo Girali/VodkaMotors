@@ -25,6 +25,24 @@ public class AppController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private bool paused = true;
+
+    public void Pause()
+    {
+        GUI_Controller.Instance.pausePanel.gameObject.SetActive(true);
+        Time.timeScale = 0;
+        GameController.Instance.player.GetComponent<PlayerFootController>().StopUse();
+        paused = true;
+    }
+
+    public void Unpause()
+    {
+        GUI_Controller.Instance.pausePanel.gameObject.SetActive(false);
+        Time.timeScale = 1;
+        GameController.Instance.player.GetComponent<PlayerFootController>().StartUse();
+        paused = false;
+    }
+
     public string mainScene;
     public string loadingScene;
 
@@ -37,6 +55,14 @@ public class AppController : MonoBehaviour
     public KeyCode interact = KeyCode.E;
     public KeyCode jump = KeyCode.Space;
     public KeyCode sprint = KeyCode.LeftShift;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && paused == false)
+        {
+            Pause();
+        }
+    }
 
     public void SelectFR()
     {
@@ -52,6 +78,7 @@ public class AppController : MonoBehaviour
 
     public void LoadMainScene()
     {
+        paused = false;
         SceneManager.LoadSceneAsync(loadingScene, LoadSceneMode.Additive);
         SceneManager.LoadScene(mainScene);
     }

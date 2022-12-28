@@ -30,6 +30,7 @@ public class PlayerFootController : MonoBehaviour
     private bool mouse1Up;
     private bool mouse2Up;
     private bool vodka;
+    private bool tab;
     private int interactLayer;
     private float yawStart;
     private bool inUse = false;
@@ -100,6 +101,7 @@ public class PlayerFootController : MonoBehaviour
             interact = Input.GetKeyDown(AppController.Instance.interact);
             jump = Input.GetKey(AppController.Instance.jump);
             sprint = Input.GetKey(AppController.Instance.sprint);
+            tab = Input.GetKeyDown(KeyCode.Tab);
 
             mouse1Down = Input.GetMouseButtonDown(0);
             mouse2Down = Input.GetMouseButtonDown(1);
@@ -145,8 +147,7 @@ public class PlayerFootController : MonoBehaviour
         playerMotor.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit, interact);
 
         playerInteractController.Motor(mouse1Down, mouse1Up, hit);
-        playerItemController.Motor(vodka, mouse1Down, reload);
-
+        playerItemController.Motor(vodka, mouse1Down, reload, tab);
 
         if (vehiculMotor != null)
             vehiculMotor.Move(forward, backward, left, right, jump, sprint, yaw, pitch, hit, interact);
