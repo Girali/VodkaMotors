@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Empty", menuName = "Parts/Empty")]
@@ -26,13 +24,13 @@ public class VehiculPartObject : ScriptableObject
     {
         string pathAbs = Application.dataPath + "/Objects/Icons/";
         string path = "Assets/Objects/Icons/";
-        Texture2D t = AssetPreview.GetAssetPreview(prefab);
+        Texture2D t = UnityEditor.AssetPreview.GetAssetPreview(prefab);
         if (t != null)
         {
             byte[] itemBGBytes = t.EncodeToPNG();
             File.WriteAllBytes(pathAbs + name + "_icon.png", itemBGBytes);
-            AssetDatabase.Refresh();
-            texture = (Texture2D)AssetDatabase.LoadAssetAtPath(path + name + "_icon.png", typeof(Texture2D)); 
+            UnityEditor.AssetDatabase.Refresh();
+            texture = (Texture2D)UnityEditor.AssetDatabase.LoadAssetAtPath(path + name + "_icon.png", typeof(Texture2D)); 
         }
     }
 #endif
@@ -52,7 +50,7 @@ public enum VehiculParts
     Spoiler,
     Sidebar,
     Bumper,
-    Exaust,
+    Exhaust,
     Bonnet,
     Door,
     Count

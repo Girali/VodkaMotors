@@ -70,7 +70,7 @@ public class VehiculPartController : MonoBehaviour
                 return sidebar;
             case VehiculParts.Bumper:
                 return bumper;
-            case VehiculParts.Exaust:
+            case VehiculParts.Exhaust:
                 return exaust;
             case VehiculParts.Bonnet:
                 return bonnet;
@@ -149,7 +149,7 @@ public class VehiculPartController : MonoBehaviour
             case VehiculParts.Bumper:
                 ip = bumper;
                 break;
-            case VehiculParts.Exaust:
+            case VehiculParts.Exhaust:
                 ip = exaust;
                 break;
             case VehiculParts.Bonnet:
@@ -274,7 +274,7 @@ public class VehiculPartController : MonoBehaviour
                 case VehiculParts.Bumper:
                     bumper = ip;
                     break;
-                case VehiculParts.Exaust:
+                case VehiculParts.Exhaust:
                     exaust = ip;
                     break;
                 case VehiculParts.Bonnet:

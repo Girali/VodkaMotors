@@ -39,7 +39,6 @@ public class CrateContentManager : MonoBehaviour
 
     public void Complete()
     {
-        
         GameController.Instance.CompleteMission();
         Destroy(gameObject);
     }

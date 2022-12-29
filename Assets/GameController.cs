@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,21 +28,37 @@ public class GameController : MonoBehaviour
     public GameObject[] prefabsMission;
 
     public SpawnPoints spawnPoints;
+    public DialogueController dialogueController;
 
     private List<MissionStructure> missionPoints = new List<MissionStructure>();
     private List<WorldStructre> majorStrcutre = new List<WorldStructre>();
     private MissionStructure startPoint = null;
     private MissionStructure endPoint = null;
 
-
-    private float spawnRadius = 100f;
+    private string[] dialoguesPackage = { "Package1", "Package2", "Package3" };
+    private float spawnRadius = 250f;
 
     public UnityEvent onMissionComplete;
+
+    private bool firstDelivery = true;
 
     public void CompleteMission()
     {
         GUI_Controller.Instance.compass.StopMission();
         onMissionComplete.Invoke();
+
+        if (firstDelivery)
+        {
+            firstDelivery = false;
+        }
+        else
+        {
+            int d = Random.Range(0, dialoguesPackage.Length);
+            MusicController.Instance.audioSourceDialogue = endPoint.source;
+            endPoint.system.Play();
+            dialogueController.StartDiaoluge(dialoguesPackage[d]);
+            StartNewMission();
+        }
     }
 
     public void StartNewMission()
@@ -49,7 +66,7 @@ public class GameController : MonoBehaviour
         startPoint = endPoint;
         endPoint = missionPoints[Random.Range(0, missionPoints.Count)];
         endPoint.StartMission();
-        GameObject g = Instantiate(prefabsMission[Random.Range(0, prefabsMission.Length)], endPoint.transform.position + endPoint.transform.up, Random.rotation);
+        GameObject g = Instantiate(prefabsMission[Random.Range(0, prefabsMission.Length)], startPoint.transform.position + startPoint.transform.up, Random.rotation);
         GUI_Controller.Instance.compass.InitMission(player, endPoint);
         g.GetComponent<CrateContentManager>().AddIndicator();
     }

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Engine Type 2
   m_EditorClassIdentifier: 
   part: 1
-  prefab: {fileID: 6833074610768915581, guid: 75ac9ba1ee676b24ab16bae7a2d4607c, type: 3}
-  texture: {fileID: 2800000, guid: 58379cd999b1e414b961257dc6d7a97f, type: 3}
+  prefab: {fileID: 8263449691206454529, guid: d0078a8ea89e12542af97b149ee43367, type: 3}
+  texture: {fileID: 2800000, guid: d68f6d52410869a45b9ef8808e5a7bcd, type: 3}
   clip: {fileID: 8300000, guid: 5e295fb3f1f64e44bbf6467937a9a172, type: 3}
   maxSpeed: 50
   pitchLimit: {x: 0.9, y: 1.3}

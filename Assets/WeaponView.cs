@@ -28,6 +28,7 @@ public class WeaponView : MonoBehaviour
 
     public AudioClip fireClip;
     public AudioClip reloadClip;
+    public AudioClip getOutWeapon;
 
     private float lastShot = 0;
     private float nextReload = 0;
@@ -46,9 +47,17 @@ public class WeaponView : MonoBehaviour
     public void AddAmmo(int i)
     {
         totalRounds += i;
+        GUI_Controller.Instance.ammo.UpdateView(currentMagazin, totalRounds);
     }
 
-    private void Start()
+    private void OnEnable()
+    {
+        audioSource.volume = fireVolume;
+        audioSource.pitch = Random.Range(0.85f, 1.15f);
+        audioSource.PlayOneShot(getOutWeapon);
+    }
+
+    private void Awake()
     {
         mask = LayerMask.GetMask("Default" , "Floor");
         audioSource = GetComponent<AudioSource>();

@@ -49,13 +49,13 @@ public class GUI_Controller : MonoBehaviour
 
     public void AddNotify(VehiculPartObject vpo)
     {
-        GameObject g = Instantiate(addNotify, gui.transform);
+        GameObject g = Instantiate(addNotify, transform);
         g.GetComponent<UI_NotifyAdd>().Init(vpo);
     }
 
     public void AddDialogue(DialogueController.Sequence s)
     {
-        GameObject g = Instantiate(addDialogue, gui.transform);
+        GameObject g = Instantiate(addDialogue, transform);
         g.GetComponent<UI_DiaolgueNotify>().InitText(s.text);
     }
 

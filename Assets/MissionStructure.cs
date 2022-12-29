@@ -24,11 +24,14 @@ public class MissionStructure : WorldStructre
     {
         if (missionPoint)
         {
-            CrateContentManager ccm = other.GetComponent<CrateContentManager>();
-            if (ccm != null)
+            if (other.attachedRigidbody)
             {
-                missionPoint = false;
-                ccm.Complete();
+                CrateContentManager ccm = other.attachedRigidbody.GetComponent<CrateContentManager>();
+                if (ccm != null)
+                {
+                    missionPoint = false;
+                    ccm.Complete();
+                }
             }
         }
     }

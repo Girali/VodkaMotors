@@ -100,7 +100,7 @@ public class UI_PartsPanel : MonoBehaviour
                 return true;
             case VehiculParts.Bumper:
                 return true;
-            case VehiculParts.Exaust:
+            case VehiculParts.Exhaust:
                 return true;
             case VehiculParts.Bonnet:
                 return true;

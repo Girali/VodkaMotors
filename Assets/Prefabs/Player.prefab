@@ -2262,7 +2262,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0
   m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: 1.1700075, y: -4.3731875, z: -2.3357022}
+  m_RotationOffset: {x: 1.1700072, y: -4.3731875, z: -2.3357024}
   m_AffectRotationX: 0
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -2828,5 +2828,6 @@ MonoBehaviour:
   reloading: 0
   fireClip: {fileID: 8300000, guid: cc04d6698cedcbf46a2c0761261261e8, type: 3}
   reloadClip: {fileID: 8300000, guid: 01d4533d83a76c1429541ce3f8b8d251, type: 3}
+  getOutWeapon: {fileID: 8300000, guid: b128f424cdb8ad446a101dcd1304331b, type: 3}
   damagePerBullet: 15
   fireVolume: 0.2

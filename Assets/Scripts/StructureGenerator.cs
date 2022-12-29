@@ -62,6 +62,8 @@ public class StructureGenerator : MonoBehaviour
         yield return new WaitForFixedUpdate();
         yield return new WaitForFixedUpdate();
 
+        int layerSafeRangeCheck = LayerMask.GetMask("SafeRange");
+
         for (int i = 0; i < result.Count; i++)
         {
             for (int j = 0; j < structres.Length; j++)
@@ -73,20 +75,25 @@ public class StructureGenerator : MonoBehaviour
 
                     if (waterLevel < hit.point.y)
                     {
-                        int inx = Random.Range(0, structres[j].prefabs.Length);
-                        WorldStructre g = Instantiate(structres[j].prefabs[inx], parentStruct).GetComponent<WorldStructre>();
+                        bool safe = !Physics.CheckSphere(hit.point, structres[j].rangeCheck, layerSafeRangeCheck);
 
-                        g.Init();
+                        if (safe || structres[j].ignoreRange)
+                        {
+                            int inx = Random.Range(0, structres[j].prefabs.Length);
+                            WorldStructre g = Instantiate(structres[j].prefabs[inx], parentStruct).GetComponent<WorldStructre>();
 
-                        g.transform.position = new Vector3(result[i].position.x * scale, hit.point.y, result[i].position.y * scale);
-                        Vector3 frwd = hit.normal;
-                        frwd.y = 0;
+                            g.Init();
 
-                        Vector3 nrml = Vector3.Cross(frwd.normalized, hit.normal);
+                            g.transform.position = new Vector3(result[i].position.x * scale, hit.point.y, result[i].position.y * scale);
+                            Vector3 frwd = hit.normal;
+                            frwd.y = 0;
 
-                        g.transform.rotation = Quaternion.LookRotation(nrml.normalized , hit.normal);
+                            Vector3 nrml = Vector3.Cross(frwd.normalized, hit.normal);
 
-                        result[i].gameObject = g.gameObject;
+                            g.transform.rotation = Quaternion.LookRotation(nrml.normalized, hit.normal);
+
+                            result[i].gameObject = g.gameObject;
+                        }
                     }
                 }
             }
@@ -159,6 +166,8 @@ public class StructureGenerator : MonoBehaviour
         [Range(1,100)]
         public int ignoreDensity;
         public GameObject[] prefabs;
+        public float rangeCheck = 15;
+        public bool ignoreRange = false;
     }
 
     public class StructureData

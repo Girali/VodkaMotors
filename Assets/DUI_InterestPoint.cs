@@ -26,10 +26,18 @@ public class DUI_InterestPoint : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void DestoryNow()
+    {
+        Destroy(gameObject);
+    }
+
     private void Update()
     {
         if(player != null)
         {
+            if(interestPoint == null)
+                Destroy(gameObject);
+
             if(followInterestPoint)
                 transform.position = interestPoint.transform.position;
 

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc9cd4227ab2bc44686f4b41bec1181d, type: 3}
+  m_Name: Bumper Type 3
+  m_EditorClassIdentifier: 
+  part: 11
+  prefab: {fileID: 3354556147102112746, guid: 02b4005995554b448af4b7ff5723ed0a, type: 3}
+  texture: {fileID: 2800000, guid: 1e1ecb2bb57f0c14d9fd5f08e4bde85d, type: 3}

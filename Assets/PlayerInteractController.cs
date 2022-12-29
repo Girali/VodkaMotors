@@ -40,6 +40,14 @@ public class PlayerInteractController : MonoBehaviour
                     lastInteractable = io;
                     GUI_Controller.Instance.SetInteractText(lastInteractable);
                 }
+
+                io = hit.collider.GetComponent<InteractableObject>();
+
+                if (io != lastInteractable)
+                {
+                    lastInteractable = io;
+                    GUI_Controller.Instance.SetInteractText(lastInteractable);
+                }
             }
             else if(i != null)
             {
@@ -86,7 +94,7 @@ public class PlayerInteractController : MonoBehaviour
                         Interactable i = hit.collider.GetComponent<Interactable>();
                         if (i != null)
                         {
-                            io.StartInteract();
+                            i.StartInteract();
                         }
                     }
                 }
@@ -119,6 +127,10 @@ public class PlayerInteractController : MonoBehaviour
             lineRenderer.SetPosition(0, hand.transform.position);
             lineRenderer.SetPosition(1, target.transform.position);
             hand.transform.position = Vector3.Lerp(hand.transform.position, target.transform.position, lerpTargetSpeed);
+        }
+        else
+        {
+            lineRenderer.enabled = false;
         }
     }
 }

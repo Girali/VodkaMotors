@@ -17,7 +17,10 @@ public class InteractableEnginePart : InteractablePart
 
     private void Update()
     {
-        audioSource.pitch = Mathf.Lerp(enginePartObject.pitchLimit.x, enginePartObject.pitchLimit.y, vehiculMotor.Speed / enginePartObject.maxSpeed);
-        audioSource.volume =  Mathf.Lerp(enginePartObject.volumeLimit.x, enginePartObject.volumeLimit.y, vehiculMotor.Speed / enginePartObject.maxSpeed);
+        if (vehiculMotor)
+        {
+            audioSource.pitch = Mathf.Lerp(enginePartObject.pitchLimit.x, enginePartObject.pitchLimit.y, vehiculMotor.Speed / enginePartObject.maxSpeed);
+            audioSource.volume = Mathf.Lerp(enginePartObject.volumeLimit.x, enginePartObject.volumeLimit.y, vehiculMotor.Speed / enginePartObject.maxSpeed);
+        }
     }
 }

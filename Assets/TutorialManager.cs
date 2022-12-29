@@ -28,6 +28,7 @@ public class TutorialManager : MonoBehaviour
     public GameObject grageInteract;
     public Interactable shotgun;
     public AudioSource radio;
+    public AudioSource car;
 
     private DUI_InterestPoint interestPoint;
 
@@ -69,11 +70,16 @@ public class TutorialManager : MonoBehaviour
         es.ennemiesToSpawn = new Vector2Int(2, 2);
         es.spawns = new List<GameObject>();
         es.allDead += steps[5].End;
+        es.totalDead = 0;
+
+        interestPoint = DUI_Controller.Instance.AddItemPoint(es.gameObject);
+        es.allDead += interestPoint.DestoryNow;
     }
 
     public void NewDelivery()
     {
-
+        MusicController.Instance.audioSourceDialogue = car;
+        GameController.Instance.StartNewMission();
     }
 
     private void Start()

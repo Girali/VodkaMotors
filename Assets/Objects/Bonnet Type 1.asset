@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68a2becb45388bc4da1d8d6d3402e5b5, type: 3}
+  m_Name: Bonnet Type 1
+  m_EditorClassIdentifier: 
+  part: 13
+  prefab: {fileID: 592389523895557443, guid: e97dfa823286068429ba0cd9d1d4347f, type: 3}
+  texture: {fileID: 2800000, guid: 3f2014ce07976a94e848302ee95f9665, type: 3}

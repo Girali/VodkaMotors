@@ -10,7 +10,8 @@ public class WorldStructre : MonoBehaviour
     {
         Major,
         Minor,
-        Mission
+        Mission,
+        Deatils
     }
 
     public float DistanceFromPlayer()

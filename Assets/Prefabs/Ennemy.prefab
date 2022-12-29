@@ -1442,6 +1442,7 @@ MonoBehaviour:
   reloading: 0
   fireClip: {fileID: 8300000, guid: 2df33a0cf66b2774b97d52015060b3dc, type: 3}
   reloadClip: {fileID: 8300000, guid: 01d4533d83a76c1429541ce3f8b8d251, type: 3}
+  getOutWeapon: {fileID: 8300000, guid: b128f424cdb8ad446a101dcd1304331b, type: 3}
   damagePerBullet: 10
   fireVolume: 1
 --- !u!1001 &6788167943864210554

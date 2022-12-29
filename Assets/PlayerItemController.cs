@@ -80,24 +80,6 @@ public class PlayerItemController : MonoBehaviour
 
     public void Motor(bool vodka, bool leftClick, bool reload, bool switchItem)
     {
-        if(switchItem)
-        {
-            if(currentItem == ItemType.Vodka)
-            {
-                currentItem = ItemType.Shotgun;
-                GUI_Controller.Instance.ammo.gameObject.SetActive(true);
-                GUI_Controller.Instance.vodka.gameObject.SetActive(false);
-            }
-            else
-            {
-                currentItem = ItemType.Vodka;
-                GUI_Controller.Instance.vodka.gameObject.SetActive(true);
-                GUI_Controller.Instance.ammo.gameObject.SetActive(false);
-            }
-
-            SwitchItem();
-        }
-
         switch (currentItem)
         {
             case ItemType.Vodka:
@@ -133,6 +115,27 @@ public class PlayerItemController : MonoBehaviour
                 break;
             default:
                 break;
+        }
+
+        if (switchable)
+        {
+            if (switchItem)
+            {
+                if (currentItem == ItemType.Vodka)
+                {
+                    currentItem = ItemType.Shotgun;
+                    GUI_Controller.Instance.ammo.gameObject.SetActive(true);
+                    GUI_Controller.Instance.vodka.gameObject.SetActive(false);
+                }
+                else
+                {
+                    currentItem = ItemType.Vodka;
+                    GUI_Controller.Instance.vodka.gameObject.SetActive(true);
+                    GUI_Controller.Instance.ammo.gameObject.SetActive(false);
+                }
+
+                SwitchItem();
+            }
         }
 
         if (!drinking)

@@ -100,7 +100,7 @@ public class BasePartController : MonoBehaviour
             case VehiculParts.Spoiler:
             case VehiculParts.Sidebar:
             case VehiculParts.Bumper:
-            case VehiculParts.Exaust:
+            case VehiculParts.Exhaust:
             case VehiculParts.Bonnet:
                 GUI_Controller.Instance.partsPanel.ShowVariant(false);
                 target = targets[(int)vp - 1 + 3];
@@ -156,8 +156,9 @@ public class BasePartController : MonoBehaviour
         if (other.attachedRigidbody)
         {
             InteractablePart interactablePart = other.attachedRigidbody.GetComponent<InteractablePart>();
-            if (interactablePart != null && interactablePart.collectablePart)
+            if (interactablePart != null && interactablePart.collectablePart && !interactablePart.added)
             {
+                interactablePart.added = true;
                 onPieceAdded.Invoke();
                 partStored.Add(interactablePart.vehiculPartObject);
                 GUI_Controller.Instance.AddNotify(interactablePart.vehiculPartObject);

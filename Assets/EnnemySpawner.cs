@@ -7,6 +7,7 @@ public class EnnemySpawner : MonoBehaviour
 {
     public GameObject prefab;
     public List<GameObject> spawns = new List<GameObject>();
+    public int totalDead = 0;
     public float spawnDistance;
     public Vector2Int ennemiesToSpawn;
     private GameObject player;
@@ -25,18 +26,10 @@ public class EnnemySpawner : MonoBehaviour
 
     public void Death(GameObject g)
     {
-        bool b = true;
+        totalDead++;
 
-        foreach (var item in spawns)
-        {
-            if(item != null)
-            {
-                b = false; 
-                break;
-            }
-        }
-
-        if (b)
+        if(totalDead == spawns.Count)
+            if(allDead != null)
             allDead.Invoke();
     }
 

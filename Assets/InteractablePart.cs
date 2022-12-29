@@ -9,6 +9,7 @@ public class InteractablePart : InteractableObject
     public Collider[] collisionColliders;
     public bool collectablePart = false;
     protected VehiculMotor vehiculMotor;
+    public bool added = false;
 
     public virtual void Init(VehiculMotor vm)
     {

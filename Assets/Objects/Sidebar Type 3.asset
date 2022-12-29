@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66fd5d87f5d3923459717a22d5d65ab0, type: 3}
+  m_Name: Sidebar Type 3
+  m_EditorClassIdentifier: 
+  part: 10
+  prefab: {fileID: 4642023987548212383, guid: c51920b41995199448e6ad7dcd945672, type: 3}
+  texture: {fileID: 2800000, guid: a256978f450516242a377f6e25e04746, type: 3}
