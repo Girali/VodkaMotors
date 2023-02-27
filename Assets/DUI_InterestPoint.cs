@@ -37,9 +37,9 @@ public class DUI_InterestPoint : MonoBehaviour
         {
             if(interestPoint == null)
                 Destroy(gameObject);
-
-            if(followInterestPoint)
-                transform.position = interestPoint.transform.position;
+            else
+                if(followInterestPoint)
+                    transform.position = interestPoint.transform.position;
 
             float f = Vector3.Distance(player.transform.position, transform.position);
 

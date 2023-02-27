@@ -38,6 +38,8 @@ public class StructureGenerator : MonoBehaviour
 
     public void GenerateStrucutreMap(EndlessTerrain et)
     {
+        seed = Random.Range(0, 1024 * 16);
+
         layerMask = LayerMask.GetMask("Floor");
         if (parentStruct)
             DestroyImmediate(parentStruct);

@@ -21,26 +21,52 @@ public class AppController : MonoBehaviour
     {
         Application.targetFrameRate = 60;
         Time.fixedDeltaTime = 1 / 60f;
-
+        AudioListener.volume = Volume;
         DontDestroyOnLoad(gameObject);
     }
 
+    public float Volume
+    {
+        get
+        {
+            return PlayerPrefs.GetFloat("Volume", 1);
+        }
+
+        set
+        {
+            PlayerPrefs.SetFloat("Volume", value);
+        }
+    }
+
+    public void ChangeVolume(float f)
+    {
+        Volume = f;
+        AudioListener.volume = f;
+    }
+
     private bool paused = true;
+    public bool blockPause = false;
 
     public void Pause()
     {
-        GUI_Controller.Instance.pausePanel.gameObject.SetActive(true);
-        Time.timeScale = 0;
-        GameController.Instance.player.GetComponent<PlayerFootController>().StopUse();
-        paused = true;
+        if (!blockPause)
+        {
+            GUI_Controller.Instance.pausePanel.gameObject.SetActive(true);
+            Time.timeScale = 0;
+            GameController.Instance.player.GetComponent<PlayerFootController>().StopUse();
+            paused = true;
+        }
     }
 
     public void Unpause()
     {
-        GUI_Controller.Instance.pausePanel.gameObject.SetActive(false);
-        Time.timeScale = 1;
-        GameController.Instance.player.GetComponent<PlayerFootController>().StartUse();
-        paused = false;
+        if (!blockPause)
+        {
+            GUI_Controller.Instance.pausePanel.gameObject.SetActive(false);
+            Time.timeScale = 1;
+            GameController.Instance.player.GetComponent<PlayerFootController>().StartUse();
+            paused = false;
+        }
     }
 
     public string mainScene;

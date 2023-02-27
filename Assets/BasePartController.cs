@@ -125,6 +125,7 @@ public class BasePartController : MonoBehaviour
 
     public void Enter()
     {
+        AppController.Instance.blockPause = true;
         partStored = partStored.OrderBy((t) => t.part).ToList();
         cam.gameObject.SetActive(true);
         vehiculPartController.transform.position = vehiculTarget.position;
@@ -137,6 +138,7 @@ public class BasePartController : MonoBehaviour
 
     public void Exit()
     {
+        AppController.Instance.blockPause = false;
         cam.gameObject.SetActive(false);
         target = null;
         vehiculPartController.GetComponent<Rigidbody>().isKinematic = false;

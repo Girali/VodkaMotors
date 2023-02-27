@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Skygradient
+  m_Name: Skybox
   m_Shader: {fileID: -6465566751694194690, guid: 547780dfe0e076d4aaabca7c928ea873, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -103,8 +103,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_72ebc47ef3c64507b45817553833d58b: {r: 0.04552332, g: 0.2905058, b: 0.31132078, a: 0}
-    - Color_eccca48eb8614ae08ef73c2a180345d5: {r: 0.37162355, g: 0.5211061, b: 0.62352943, a: 0}
+    - Color_72ebc47ef3c64507b45817553833d58b: {r: 1, g: 0.9860713, b: 0.7783019, a: 0}
+    - Color_eccca48eb8614ae08ef73c2a180345d5: {r: 1, g: 1, b: 1, a: 0}
     - Vector2_108984ba681d4fa482db45c44685847d: {r: -50, g: 50, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}

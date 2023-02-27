@@ -44,7 +44,7 @@ public class TutorialManager : MonoBehaviour
         missiongFirst.GetComponent<MissionStructure>().system.Play();
 
         DUI_InterestPoint ip = DUI_Controller.Instance.AddItemPoint(g);
-        g.GetComponent<InteractablePart>().onInteractStart += ip.DestoryNow;
+        //g.GetComponent<InteractablePart>().onInteractStart += ip.DestoryNow;
     }
 
     public void UseGarage()

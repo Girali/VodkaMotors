@@ -46,7 +46,7 @@ public class EndlessTerrain : MonoBehaviour {
 
 	void Start() {
 		mapGenerator = FindObjectOfType<MapGenerator> ();
-
+		mapGenerator.seed = Random.Range(0, 1024 * 16);
 		maxViewDst = detailLevels [detailLevels.Length - 1].visibleDstThreshold;
 		chunkSize = MapGenerator.mapChunkSize - 1;
 
